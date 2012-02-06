@@ -12,7 +12,7 @@ void Face::addVertex(Vertex& vertex)
 
 void Face::addTextureCoordinate(Vertex& texture_coordinate)
 {
-	m_vertices.push_back(texture_coordinate);
+	m_texture_coordinates.push_back(texture_coordinate);
 }
 
 void Face::addNormal(Vertex& normal)

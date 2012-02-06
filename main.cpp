@@ -52,7 +52,7 @@ void render()
 
 	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -10.0f);
+	glTranslatef(0.0f, 0.0f, -30.0f);
 
 	glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -67,7 +67,7 @@ void close()
 
 int main(int argc, char** argv)
 {
-	Model model = loadObj("cyl.obj");
+	Model model = loadObj("container.obj");
 
 	running = 1;
 
