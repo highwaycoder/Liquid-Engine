@@ -5,10 +5,6 @@
 
 #include <stdint.h>
 
-union x
-{
-	unsigned char mem[5];
-};
 
 /* Padding issues are forcing me to use chars for these fields instead of their uint16_t counterparts. Paddings increase size from 5 to 6 and fuck up everything. */
 struct COLOR_MAP_SPECIFICATIONS
