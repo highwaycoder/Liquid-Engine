@@ -8,6 +8,7 @@
 
 #include "ModelLoader.h"
 #include "BitmapLoader.h"
+#include "TargaLoader.h"
 
 int running = 0;
 
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
 {
 	Model model = loadObj("container.obj");
 	loadBMP("./samples/24bpp.bmp");
+	loadTGA("./samples/4x4rle-bottomleft.tga");
 
 	running = 1;
 
