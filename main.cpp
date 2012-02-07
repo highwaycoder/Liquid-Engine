@@ -7,6 +7,7 @@
 #include "Face.h"
 
 #include "ModelLoader.h"
+#include "BitmapLoader.h"
 
 int running = 0;
 
@@ -68,6 +69,7 @@ void close()
 int main(int argc, char** argv)
 {
 	Model model = loadObj("container.obj");
+	loadBMP("./samples/24bpp.bmp");
 
 	running = 1;
 
