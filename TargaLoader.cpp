@@ -43,7 +43,7 @@ struct Targa loadTGA(const char* path)
 	printf("Origin: %u,%u\n", targa.header.image_specifications.x_origin, targa.header.image_specifications.y_origin);
 
 	/* Calculate color map size and offset [Note: The color map doesn't necessarily exist (0s indicate that)]*/
-	color_map_offset = (256 * targa.header.color_map_specifications.color_map_offset[1]) + targa.header.color_map_specifications.color_map_offset[0];
+	color_map_offset = (256 * targa.header.color_map_specifications.color_map_offset[1]) + targa.header.color_map_specifications.color_map_offset[0] + targa.header.id_length;
 	color_map_size = (targa.header.color_map_specifications.color_map_bpp / 8) * ((256 * targa.header.color_map_specifications.color_map_length[1]) + targa.header.color_map_specifications.color_map_length[0]);
 
 	printf("Color Map Offset: %u\n", color_map_offset);
@@ -51,7 +51,7 @@ struct Targa loadTGA(const char* path)
 
 	/* Calculate pixel data size and offset */
 	bytes_per_pixel = targa.header.image_specifications.image_bpp / 8; //assuming that BPP is multiple of 8. Probably need to check on that later
-	pixel_data_offset = TARGA_HEADER_SIZE + color_map_size;
+	pixel_data_offset = TARGA_HEADER_SIZE + color_map_size + targa.header.id_length;
 	pixel_data_size = (targa.header.image_specifications.image_width * targa.header.image_specifications.image_height * bytes_per_pixel);
 
 	/* Allocate pixel data space */
@@ -66,13 +66,107 @@ struct Targa loadTGA(const char* path)
 			targa.pixel_data[current_offset - pixel_data_offset + 1] = file_memory[current_offset+1]; //Green
 			targa.pixel_data[current_offset - pixel_data_offset + 2] = file_memory[current_offset]; //Blue
 
-			printf("Pixel found!\n");
-
 			/* Do we have an alpha channel? */
 			if (bytes_per_pixel == 4)
 				targa.pixel_data[current_offset - pixel_data_offset + 3] = file_memory[current_offset+3]; //Alpha
 		}
 	}
+	else if (targa.header.image_type == TGA_RLETRUECOLOR)
+	{
+		/*
+		Here's the bitch and a half situation, the origin can be at any corner of the image, and RLE works from that origin.
+		Top-left and Bottom-left, I've seen and sampled, so those will be tested, but all should be functional.
+		Unfortunately, this origin fuckery might make this algorithm look kind of messy. C'est la vie.
+		We're going to be mirroring the image data as necessary
+		*/
+
+		uint16_t file_offset = pixel_data_offset; //we're going to keep track of our progress through file data separate from finalized image data
+		uint16_t memory_offset = 0; //this is our offset within our finalized pixel data
+		uint8_t RLE_header;
+
+		/* Keep track of which mirrorings we need */
+		bool mirror_y = false;
+		bool mirror_x = false;
+
+		/* These are for my own convenience. Memory is cheap. Bite me. */
+		uint16_t width = targa.header.image_specifications.image_width;
+		uint16_t height = targa.header.image_specifications.image_height;
+
+		/* We need these for keeping track of how many pixels we've populated out of the total */
+		uint64_t current_pixel_count = 0;
+		uint64_t total_pixel_count = width * height;
+
+
+		/* Calculate which direction we'll be going */
+		if (targa.header.image_specifications.x_origin == targa.header.image_specifications.image_width)
+			mirror_x = true;
+		else if (targa.header.image_specifications.x_origin == 0)
+			mirror_x = false;
+
+		if (targa.header.image_specifications.y_origin == targa.header.image_specifications.image_height)
+			mirror_y = true;
+		else if (targa.header.image_specifications.x_origin == 0)
+			mirror_y = false;
+		
+
+		/* While we have pixels left that haven't been populated, parse RLE headers */
+		while (current_pixel_count < total_pixel_count)
+		{
+			RLE_header = file_memory[file_offset];
+
+			if (RLE_header < 128) //this header's value + 1 raw pixels follows
+			{
+				uint8_t number_of_raw_pixels = (RLE_header + 1);
+
+				for (int current_pixel = 0; current_pixel < number_of_raw_pixels; current_pixel++)
+				{
+					targa.pixel_data[memory_offset] = file_memory[file_offset + 3];//Red
+					targa.pixel_data[memory_offset + 1] = file_memory[file_offset + 2];//Blue 
+					targa.pixel_data[memory_offset + 2] = file_memory[file_offset + 1];//Green
+
+					if (bytes_per_pixel == 4)
+						targa.pixel_data[memory_offset + 3] = file_memory[file_offset + 4];//Alpha					
+
+					/* Increment pixel count */
+					current_pixel_count++;
+
+					/* Move our file index and our memory index forward */
+					file_offset = file_offset + bytes_per_pixel;
+					memory_offset = memory_offset + bytes_per_pixel;
+				}
+
+				printf("fucccccccccked RLE Header: %u\n", RLE_header);
+
+				/* Grab the next RLE header */
+				file_offset = file_offset + 1;
+			}
+			else if (RLE_header >= 128) //this header value - 127 pixels follow of the following color
+			{
+				uint8_t number_of_pixels = RLE_header - 127;
+
+
+				for (int current_pixel = 0; current_pixel < number_of_pixels; current_pixel++)
+				{
+					targa.pixel_data[memory_offset] = file_memory[file_offset + 3];//Red
+					targa.pixel_data[memory_offset + 1] = file_memory[file_offset + 2];//Blue 
+					targa.pixel_data[memory_offset + 2] = file_memory[file_offset + 1];//Green
+
+					if (bytes_per_pixel == 4)
+						targa.pixel_data[memory_offset + 3] = file_memory[file_offset + 4];//Alpha
+
+					/* Move our memory index forward */
+					memory_offset = memory_offset + bytes_per_pixel;
+
+					/* Increment pixel count */
+					current_pixel_count++;
+				}
+
+				file_offset = file_offset + (bytes_per_pixel) + 1;
+			}
+		}
+
+	}
+
 
 	/* Free the file memory */
 	free(file_memory);
