@@ -4,7 +4,7 @@
 #include "StringProcessing.h"
 #include "Targa.h"
 
-void loadTGA(const char*);
+struct Targa loadTGA(const char*);
 
 #endif
 

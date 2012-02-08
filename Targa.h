@@ -5,6 +5,17 @@
 
 #include <stdint.h>
 
+enum IMAGE_TYPE
+{
+	TGA_NOIMAGE = 0,
+	TGA_UNCOMPRESSEDCOLORMAPPED = 1,
+	TGA_UNCOMPRESSEDTRUECOLOR = 2,
+	TGA_UNCOMPRESSEDBLACKANDWHITE = 3,
+	TGA_RLECOLORMAPPED = 9,
+	TGA_RLETRUECOLOR = 10,
+	TGA_RLEBLACKANDWHITE = 11,
+
+};
 
 /* Padding issues are forcing me to use chars for these fields instead of their uint16_t counterparts. Paddings increase size from 5 to 6 and fuck up everything. */
 struct COLOR_MAP_SPECIFICATIONS
@@ -36,7 +47,7 @@ struct TARGAHEADER
 struct Targa
 {
 	struct TARGAHEADER header;
-	unsigned char* data;
+	unsigned char* pixel_data;
 };
 
 #endif

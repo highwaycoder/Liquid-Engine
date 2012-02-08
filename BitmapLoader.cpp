@@ -4,6 +4,7 @@ void loadBMP(const char* path)
 {
 	FILE* file;
 	int file_size = -1;
+	char* file_memory = NULL;
 	struct Bitmap bitmap;
 
 	/* Open the model file */
@@ -14,17 +15,23 @@ void loadBMP(const char* path)
 	file_size = ftell(file);
 	fseek(file, 0, SEEK_SET);
 
-	/* Read the file header into memory */
-	fread(&bitmap.file_header, sizeof(char), BITMAP_FILEHEADER_SIZE, file);
+	/* Read the file into memory */
+	file_memory = (char*)(malloc(sizeof(char) * file_size));
+	fread(file_memory, sizeof(char), file_size, file);
 
-	/* Read the info header into memory */
-	fread(&bitmap.info_header, sizeof(char), BITMAP_INFOHEADER_SIZE, file);
+	/* Copy the file header into memory */
+	memcpy(&bitmap.file_header, file_memory, BITMAP_FILEHEADER_SIZE);
 
-	printf("Bytes: %s\n", bitmap.file_header.signature);
-	printf("BPP: %i\n", bitmap.info_header.bits_per_pixel);
+	/* Copy the info header into memory */
+	memcpy(&bitmap.info_header, (file_memory + BITMAP_FILEHEADER_SIZE), BITMAP_INFOHEADER_SIZE);
 
 	/* We no longer need this file open */
 	fclose(file);
 
+	printf("Bytes: %s\n", bitmap.file_header.signature);
+	printf("BPP: %i\n", bitmap.info_header.bits_per_pixel);
+
+	/* Free the file memory */
+	free(file_memory);
 }
 
