@@ -4,7 +4,7 @@
 #include "StringProcessing.h"
 #include "Bitmap.h"
 
-void loadBMP(const char*);
+struct Bitmap loadBMP(const char*);
 
 #endif
 

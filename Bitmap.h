@@ -21,10 +21,10 @@ typedef enum
 struct BITMAPFILEHEADER
 {
 	unsigned char signature[2]; //should be "BM" typically
-	uint32_t file_size;
-	uint16_t first_reserved_block; //reserved by the app that creates the bitmap
-	uint16_t second_reserved_block;
-	uint32_t data_offset; //where in the file does the data begin
+	unsigned char file_size[4];
+	unsigned char first_reserved_block[2]; //reserved by the app that creates the bitmap
+	unsigned char second_reserved_block[2];
+	unsigned char data_offset[4]; //where in the file does the data begin
 };
 
 /* This is basically the Coca Cola Classic of DIB headers, so this should be all that is needed for typical support */
@@ -47,7 +47,7 @@ struct Bitmap
 {
 	struct BITMAPFILEHEADER file_header;
 	struct BITMAPINFOHEADER info_header;
-	char* data;
+	unsigned char* pixel_data;
 };
 
 #endif
