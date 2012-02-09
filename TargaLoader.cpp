@@ -9,8 +9,8 @@ struct Targa loadTGA(const char* path)
 
 	/* Everything we need to calculate pixel data field size and position */
 	uint8_t bytes_per_pixel;
-	uint16_t pixel_data_offset;
-	uint16_t pixel_data_size;
+	uint64_t pixel_data_offset;
+	uint64_t pixel_data_size;
 
 	/* Color map position and length */
 	uint16_t color_map_offset;
@@ -80,8 +80,8 @@ struct Targa loadTGA(const char* path)
 		We're going to be mirroring the image data as necessary
 		*/
 
-		uint16_t file_offset = pixel_data_offset; //we're going to keep track of our progress through file data separate from finalized image data
-		uint16_t memory_offset = 0; //this is our offset within our finalized pixel data
+		uint64_t file_offset = pixel_data_offset; //we're going to keep track of our progress through file data separate from finalized image data
+		uint64_t memory_offset = 0; //this is our offset within our finalized pixel data
 		uint8_t RLE_header;
 
 		/* Keep track of which mirrorings we need */
@@ -118,7 +118,7 @@ struct Targa loadTGA(const char* path)
 			{
 				uint8_t number_of_raw_pixels = (RLE_header + 1);
 
-				for (int current_pixel = 0; current_pixel < number_of_raw_pixels; current_pixel++)
+				for (uint64_t current_pixel = 0; current_pixel < number_of_raw_pixels; current_pixel++)
 				{
 					targa.pixel_data[memory_offset] = file_memory[file_offset + 3];//Red
 					targa.pixel_data[memory_offset + 1] = file_memory[file_offset + 2];//Blue 
@@ -145,7 +145,7 @@ struct Targa loadTGA(const char* path)
 				uint8_t number_of_pixels = RLE_header - 127;
 
 
-				for (int current_pixel = 0; current_pixel < number_of_pixels; current_pixel++)
+				for (uint64_t current_pixel = 0; current_pixel < number_of_pixels; current_pixel++)
 				{
 					targa.pixel_data[memory_offset] = file_memory[file_offset + 3];//Red
 					targa.pixel_data[memory_offset + 1] = file_memory[file_offset + 2];//Blue 

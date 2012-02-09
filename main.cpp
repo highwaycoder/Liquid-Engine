@@ -83,15 +83,15 @@ int main(int argc, char** argv)
 	GLuint tex;
 
 	//Model model = loadObj("container.obj");
-	struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
-	//struct Targa targa = loadTGA("./samples/wood-rle.tga");
+	//struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
+	struct Targa targa = loadTGA("./samples/danger-big.tga");
 
 	glGenTextures(1, &tex);
 
 	glBindTexture(GL_TEXTURE_2D, tex);
 
-	//glTexImage2D(GL_TEXTURE_2D, 0, 3, targa.header.image_specifications.image_width, targa.header.image_specifications.image_height, 0, GL_RGB, GL_UNSIGNED_BYTE, targa.pixel_data);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, bitmap.info_header.width, bitmap.info_header.height, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmap.pixel_data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, targa.header.image_specifications.image_width, targa.header.image_specifications.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, targa.pixel_data);
+	//glTexImage2D(GL_TEXTURE_2D, 0, 3, bitmap.info_header.width, bitmap.info_header.height, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmap.pixel_data);
 
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
