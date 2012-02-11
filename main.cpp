@@ -22,7 +22,7 @@ void close();
 int window_width = 800;
 int window_height = 800;
 float aspect_ratio = ((float)window_height) / window_width;
-
+float angle = 0.0;
 
 void init()
 {
@@ -44,6 +44,9 @@ void init()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+
+	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LEQUAL);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
@@ -54,12 +57,15 @@ void handle_input()
 
 void render()
 {
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
 
 	glTranslatef(0.0f, 0.0f, -30.0f);
 
-	//glColor3f(1.0f, 0.0f, 0.0f);
+	glRotatef(angle, 0.0f, 1.0f, 0.0f);
+	angle = angle + 0.05;
 
 
 }
@@ -82,9 +88,9 @@ int main(int argc, char** argv)
 
 	GLuint tex;
 
-	//Model model = loadObj("container.obj");
+	Model model = loadObj("container.obj");
 	//struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
-	struct Targa targa = loadTGA("./samples/danger-big.tga");
+	struct Targa targa = loadTGA("./samples/tex.tga");
 
 	glGenTextures(1, &tex);
 
@@ -101,16 +107,16 @@ int main(int argc, char** argv)
 	while(running)
 	{
 		render();
-		//model.render();
+		model.render();
 
 		glBindTexture(GL_TEXTURE_2D, tex);
 
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 0.0f);
-			glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 0.0f);
-			glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 0.0f);
-		glEnd();
+		//glBegin(GL_QUADS);
+		//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 0.0f);
+		//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 0.0f);
+		//	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+		//	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 0.0f);
+		//glEnd();
 
 		glfwSwapBuffers();
 	}

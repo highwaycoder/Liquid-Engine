@@ -22,11 +22,14 @@ void Face::addNormal(Vertex& normal)
 
 void Face::render()
 {
-	glColor3f(1.0f, 0.0f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 0.0f);
 
 	glBegin(GL_POLYGON);
 		for (int index = 0; index < m_vertices.size(); index++)
+		{
+			glTexCoord2f(m_texture_coordinates[index].getX(), m_texture_coordinates[index].getY());
 			glVertex3f(m_vertices[index].getX(), m_vertices[index].getY(), m_vertices[index].getZ());
+		}
 	glEnd();
 }
 
