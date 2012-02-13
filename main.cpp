@@ -8,6 +8,8 @@
 #include "AssetModule/Model.h"
 #include "AssetModule/ObjLoader.h"
 
+#include "UIModule/control.h"
+
 int running = 0;
 
 void init();
@@ -98,7 +100,7 @@ int main(int argc, char** argv)
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-
+	show();
 
 	while(running)
 	{

@@ -1,7 +1,7 @@
 PARENTDIRECTORY = ..
 
 UIMODULE = ./UIModule
-UIMODULEOBJS = EngineCanvas.o UIApp.o
+UIMODULEOBJS = EngineCanvas.o UIApp.o control.o
 
 UIMODULEFLAGS = $(shell wx-config --cppflags)
 UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
@@ -17,13 +17,19 @@ LIBS = -lGL -lGLU -lglfw
 CC = g++
 
 all: main.o AssetModule UtilityModule
-	$(CC) main.o -o main -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(LIBS)
+	$(CC) main.o -o main -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS)
 
 main.o: main.cpp
 	$(CC) -c main.cpp
 
 UIModule: UIModuleObjects
 	cd $(UIMODULE); $(CC) $(UIMODULEOBJS) $(UIMODULELIBS)
+
+UIModule.so: UIModuleObjects
+	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
+
+UIModule.a: UIModuleObjects
+	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
 
 UIModuleObjects:
 	cd $(UIMODULE); $(CC) -c *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
@@ -56,4 +62,5 @@ clean:
 	rm -f *.o
 	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
 	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
+	rm -f $(UIMODULE)/*.o $(UIMODULE)/*.a $(UIMODULE)/*.so
 

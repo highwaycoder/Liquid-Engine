@@ -2,8 +2,8 @@
 #define __UIAPP_H__
 
 
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
+#include "wx/wx.h"
+#include "wx/glcanvas.h"
 
 #include "EngineCanvas.h"
 

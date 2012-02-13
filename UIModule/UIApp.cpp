@@ -1,6 +1,6 @@
 #include "UIApp.h"
 
-IMPLEMENT_APP(UIApp)
+IMPLEMENT_APP_NO_MAIN(UIApp)
 
 bool UIApp::OnInit()
 {

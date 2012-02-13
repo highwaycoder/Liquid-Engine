@@ -1,8 +1,8 @@
 #ifndef __ENGINECANVAS_H__
 #define __ENGINECANVAS_H__
 
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
+#include "wx/wx.h"
+#include "wx/glcanvas.h"
 
 class EngineCanvas : public wxGLCanvas
 {
