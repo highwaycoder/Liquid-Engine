@@ -28,6 +28,7 @@ void init()
 	if (glfwOpenWindow(window_width, window_height, 5, 6, 5, 0, 0, 0, GLFW_WINDOW) != GL_TRUE)
 		close();
 
+
 	glfwSetWindowTitle("Render");
 
 

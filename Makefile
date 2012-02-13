@@ -1,5 +1,11 @@
 PARENTDIRECTORY = ..
 
+UIMODULE = ./UIModule
+UIMODULEOBJS = EngineCanvas.o UIApp.o
+
+UIMODULEFLAGS = $(shell wx-config --cppflags)
+UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
+
 ASSETMODULE = ./AssetModule
 ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o Face.o Model.o TextureSample2D.o
 
@@ -11,11 +17,16 @@ LIBS = -lGL -lGLU -lglfw
 CC = g++
 
 all: main.o AssetModule UtilityModule
-	$(CC) main.o -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(LIBS)
+	$(CC) main.o -o main -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(LIBS)
 
 main.o: main.cpp
 	$(CC) -c main.cpp
 
+UIModule: UIModuleObjects
+	cd $(UIMODULE); $(CC) $(UIMODULEOBJS) $(UIMODULELIBS)
+
+UIModuleObjects:
+	cd $(UIMODULE); $(CC) -c *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 AssetModule: AssetModule.so AssetModule.a
 
@@ -42,7 +53,7 @@ UtilityModuleObjects: $(UTILITYMODULE)/*.cpp
 
 
 clean:
-	rm *.o
-	rm $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
-	rm $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
+	rm -f *.o
+	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
+	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
 
