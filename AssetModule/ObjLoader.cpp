@@ -12,8 +12,8 @@ Model loadObj(const char* path)
 	int line_count = 0;
 
 	std::vector<Vertex> vertices;
-	std::vector<Vertex> texture_coordinates;
-	std::vector<Vertex> normals;
+	std::vector<TextureCoordinate> texture_coordinates;
+	std::vector<Normal> normals;
 
 	/* Open the model file */
 	file = fopen(path, "r");
@@ -74,16 +74,16 @@ Model loadObj(const char* path)
 		else if (strcmp(operator_token, "vt") == 0)
 		{
 			/* Parse vertex */
-			float x = atof(words[1]);
-			float y = atof(words[2]);
-			float z = 0;
+			float u = atof(words[1]);
+			float v = atof(words[2]);
+			float w = 0;
 
-			printf("Texture Coordinate: %f %f %f\n", x, y, z);
+			printf("Texture Coordinate: %f %f %f\n", u, v, w);
 
-			Vertex vertex(x, y, z);
+			TextureCoordinate textureCoordinate(u, v, w);
 
 			/* Store it (these should stay in order, linearly - THIS IS CRUCIAL) */
-			texture_coordinates.push_back(vertex);
+			texture_coordinates.push_back(textureCoordinate);
 		}
 		else if (strcmp(operator_token, "vn") == 0)
 		{
@@ -94,10 +94,10 @@ Model loadObj(const char* path)
 
 			printf("Normal: %f %f %f\n", x, y, z);
 
-			Vertex vertex(x, y, z);
+			Normal normal(x, y, z);
 
 			/* Store it (these should stay in order, linearly - THIS IS CRUCIAL) */
-			normals.push_back(vertex);
+			normals.push_back(normal);
 		}
 		else if (strcmp(operator_token, "f") == 0)
 		{

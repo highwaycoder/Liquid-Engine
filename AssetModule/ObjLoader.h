@@ -8,6 +8,9 @@
 #include <cstring>
 
 #include "Vertex.h"
+#include "Normal.h"
+#include "TextureCoordinate.h"
+
 #include "Face.h"
 #include "Model.h"
 

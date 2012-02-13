@@ -1,7 +1,7 @@
-#ifndef __H_VERTEX__
-#define __H_VERTEX__
+#ifndef __H_NORMAL__
+#define __H_NORMAL__
 
-class Vertex
+class Normal
 {
 	private:
 		float m_x;
@@ -9,8 +9,8 @@ class Vertex
 		float m_z;
 
 	public:
-		Vertex();
-		Vertex(float, float, float);
+		Normal();
+		Normal(float, float, float);
 
 		float getX() const;
 		float getY() const;

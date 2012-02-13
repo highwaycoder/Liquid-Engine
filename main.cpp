@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 
 	GLuint tex;
 
-	Model model = loadObj("container.obj");
+	//Model model = loadObj("container.obj");
 	//struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
 	//struct Targa targa = loadTGA("./samples/tex.tga");
 
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 	while(running)
 	{
 		render();
-		model.render();
+		//model.render();
 
 		glBindTexture(GL_TEXTURE_2D, tex);
 

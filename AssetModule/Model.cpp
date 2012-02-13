@@ -11,11 +11,10 @@ void Model::addFace(Face& face)
 	m_faces.push_back(face);
 }
 
-void Model::render()
+std::vector<Face> Model::getFaces() const
 {
-	for (int index = 0; index < m_faces.size(); index++)
-	{
-		m_faces[index].render();
+	std::vector<Face> faces(m_faces);
 
-	}
+	return faces;
 }
+
