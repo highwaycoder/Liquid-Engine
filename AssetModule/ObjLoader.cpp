@@ -1,4 +1,6 @@
-#include "ModelLoader.h"
+#include "ObjLoader.h"
+
+#include "UtilityModule/StringProcessing.h"
 
 Model loadObj(const char* path)
 {

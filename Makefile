@@ -1,32 +1,48 @@
+PARENTDIRECTORY = ..
+
+ASSETMODULE = ./AssetModule
+ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o Face.o Model.o TextureSample2D.o
+
+UTILITYMODULE = ./UtilityModule
+UTILITYMODULEOBS = StringProcessing.o
+
+LIBS = -lGL -lGLU -lglfw
+
 CC = g++
 
-all: main.o Model.o Vertex.o Face.o TextureSample2D.o ModelLoader.o TargaLoader.o BitmapLoader.o StringProcessing.o
-	$(CC) main.o Model.o Vertex.o Face.o TextureSample2D.o ModelLoader.o TargaLoader.o BitmapLoader.o StringProcessing.o -o main -lglfw -lGL -lGLU
+all: main.o AssetModule UtilityModule
+	$(CC) main.o -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(LIBS)
 
 main.o: main.cpp
 	$(CC) -c main.cpp
 
-Model.o: Model.cpp
-	$(CC) -c Model.cpp
 
-Vertex.o: Vertex.cpp
-	$(CC) -c Vertex.cpp
+AssetModule: AssetModule.so AssetModule.a
 
-Face.o: Face.cpp
-	$(CC) -c Face.cpp
+AssetModule.so: AssetModuleObjects
+	cd $(ASSETMODULE); $(CC) -shared -o AssetModule.so $(ASSETMODULEOBJS)
 
-TextureSample2D.o: TextureSample2D.cpp
-	$(CC) -c TextureSample2D.cpp
+AssetModule.a: AssetModuleObjects
+	cd $(ASSETMODULE); ar rs AssetModule.a $(ASSETMODULEOBJS)
 
-ModelLoader.o: ModelLoader.cpp
-	$(CC) -c ModelLoader.cpp
+AssetModuleObjects: $(ASSETMODULE)/*.cpp
+	cd $(ASSETMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY)
 
-TargaLoader.o: TargaLoader.cpp
-	$(CC) -c TargaLoader.cpp
 
-BitmapLoader.o: BitmapLoader.cpp
-	$(CC) -c BitmapLoader.cpp
+UtilityModule: UtilityModule.so UtilityModule.a
 
-StringProcessing.o: StringProcessing.cpp
-	$(CC) -c StringProcessing.cpp
+UtilityModule.so: UtilityModuleObjects
+	cd $(UTILITYMODULE); $(CC) -shared -o UtilityModule.so $(UTILITYMODULEOBS)
+
+UtilityModule.a: UtilityModuleObjects
+	cd $(UTILITYMODULE); ar rs UtilityModule.a $(UTILITYMODULEOBS)
+
+UtilityModuleObjects: $(UTILITYMODULE)/*.cpp
+	cd $(UTILITYMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY)
+
+
+clean:
+	rm *.o
+	rm $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
+	rm $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
 

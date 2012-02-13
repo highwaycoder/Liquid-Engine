@@ -7,7 +7,6 @@
 #include <vector>
 #include <cstring>
 
-#include "StringProcessing.h"
 #include "Vertex.h"
 #include "Face.h"
 #include "Model.h"
