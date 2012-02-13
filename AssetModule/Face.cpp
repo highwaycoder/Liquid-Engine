@@ -10,35 +10,34 @@ void Face::addVertex(Vertex& vertex)
 	m_vertices.push_back(vertex);
 }
 
-void Face::addTextureCoordinate(Vertex& texture_coordinate)
+void Face::addTextureCoordinate(TextureCoordinate& texture_coordinate)
 {
 	m_texture_coordinates.push_back(texture_coordinate);
 }
 
-void Face::addNormal(Vertex& normal)
+void Face::addNormal(Normal& normal)
 {
 	m_normals.push_back(normal);
 }
 
-void Face::render()
+std::vector<Vertex> Face::getVertices() const
 {
-	//glColor3f(1.0f, 0.0f, 0.0f);
+	std::vector<Vertex> vertices(m_vertices);
 
-	glBegin(GL_POLYGON);
-		for (int index = 0; index < m_vertices.size(); index++)
-		{
-			glTexCoord2f(m_texture_coordinates[index].getX(), m_texture_coordinates[index].getY());
-			glVertex3f(m_vertices[index].getX(), m_vertices[index].getY(), m_vertices[index].getZ());
-		}
-	glEnd();
+	return vertices;
 }
 
-void Face::debug_print()
+std::vector<TextureCoordinate> Face::getTextureCoordinates() const
 {
-	printf("Face Definition:\n");
+	std::vector<TextureCoordinate> texture_coordinates(m_texture_coordinates);
 
-	for (int i = 0; i < m_vertices.size(); i++)
-	{
-		printf("V = %f, %f, %f\n", m_vertices[i].getX(), m_vertices[i].getY(), m_vertices[i].getZ());
-	}
+	return texture_coordinates;
 }
+
+std::vector<Normal> Face::getNormals() const
+{
+	std::vector<Normal> normals(m_normals);
+
+	return normals;
+}
+

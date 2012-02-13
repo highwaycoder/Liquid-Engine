@@ -14,8 +14,7 @@ class Model
 		Model();
 
 		void addFace(Face&);
-
-		void render();
+		std::vector<Face> getFaces() const;
 };
 
 #endif

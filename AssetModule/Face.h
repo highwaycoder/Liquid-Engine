@@ -2,8 +2,10 @@
 #define __H_FACE__
 
 #include <vector>
-#include <GL/gl.h>
+
 #include "Vertex.h"
+#include "TextureCoordinate.h"
+#include "Normal.h"
 
 #include <stdio.h>
 
@@ -11,19 +13,20 @@ class Face
 {
 	private:
 		std::vector<Vertex> m_vertices;
-		std::vector<Vertex> m_texture_coordinates;
-		std::vector<Vertex> m_normals;
+		std::vector<TextureCoordinate> m_texture_coordinates;
+		std::vector<Normal> m_normals;
 
 	public:
 		Face();
 
 		void addVertex(Vertex&);
-		void addTextureCoordinate(Vertex&);
-		void addNormal(Vertex&);
+		void addTextureCoordinate(TextureCoordinate&);
+		void addNormal(Normal&);
 
-		void render();
+		std::vector<Vertex> getVertices() const;
+		std::vector<TextureCoordinate> getTextureCoordinates() const;
+		std::vector<Normal> getNormals() const;
 
-		void debug_print();
 };
 
 #endif
