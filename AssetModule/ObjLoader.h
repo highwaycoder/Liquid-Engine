@@ -14,6 +14,6 @@
 #include "Face.h"
 #include "Model.h"
 
-Model loadObj(const char* path);
+Model* loadObj(const char* path);
 
 #endif

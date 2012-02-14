@@ -22,7 +22,7 @@ LIBS = -lglfw
 CC = g++
 
 all: main.o AssetModule UtilityModule UIModule.a RenderModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS)
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
 
 main.o: main.cpp
 	$(CC) -c main.cpp
@@ -61,7 +61,7 @@ AssetModule.a: AssetModuleObjects
 	cd $(ASSETMODULE); ar rs AssetModule.a $(ASSETMODULEOBJS)
 
 AssetModuleObjects: $(ASSETMODULE)/*.cpp
-	cd $(ASSETMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY)
+	cd $(ASSETMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY) 
 
 
 UtilityModule: UtilityModule.so UtilityModule.a
