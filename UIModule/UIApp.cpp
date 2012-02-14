@@ -4,10 +4,12 @@ IMPLEMENT_APP_NO_MAIN(UIApp)
 
 bool UIApp::OnInit()
 {
-    wxFrame *frame = new wxFrame((wxFrame *)NULL, -1,  wxT("Hello GL World"), wxPoint(50,50), wxSize(200,200));
-    new EngineCanvas(frame);
+	EditorWindow* editor = new EditorWindow(); 
+	EngineWindow* engine = new EngineWindow();
 
-    frame->Show(TRUE);
-    return TRUE;
+	editor->Show(TRUE);
+	engine->Show(TRUE);
+
+	return TRUE;
 }
 

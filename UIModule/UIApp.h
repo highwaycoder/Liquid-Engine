@@ -5,7 +5,8 @@
 #include "wx/wx.h"
 #include "wx/glcanvas.h"
 
-#include "EngineCanvas.h"
+#include "EditorWindow.h"
+#include "EngineWindow.h"
 
 class UIApp : public wxApp
 {

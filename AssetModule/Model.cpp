@@ -40,6 +40,14 @@ bool Model::isValid() const
 	uint32_t texture_coordinates_length = m_texture_coordinates.size();
 	uint32_t normals_length = m_normals.size();
 
+	/* if a count is zero, let's make it equal to the vertices length to save a comparison */
+	if (texture_coordinates_length == 0)
+		texture_coordinates_length = vertices_length;
+
+	if (normals_length == 0)
+		normals_length = vertices_length;
+
+
 	/* Is this even a valid geometric primitive? */
 	if ((vertices_length != texture_coordinates_length) || (vertices_length != normals_length))
 		return false; /* invalid model */

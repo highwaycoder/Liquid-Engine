@@ -10,6 +10,7 @@
 #include "AssetModule/Model.h"
 #include "AssetModule/ObjLoader.h"
 
+#include "UIModule/UIModule.h"
 
 int running = 0;
 
@@ -43,20 +44,26 @@ void close()
 
 int main(int argc, char** argv)
 {
-	printf("gibberish\n");
+	Model* model = loadObj("hex.obj");
+
 
 	running = 1;
 
-	//Model* model = loadObj("hex.obj");
+
 	//struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
 	//struct Targa targa = loadTGA("./samples/tex.tga");
 	//glTexImage2D(GL_TEXTURE_2D, 0, 4, targa.header.image_specifications.image_width, targa.header.image_specifications.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, targa.pixel_data);
 	//glTexImage2D(GL_TEXTURE_2D, 0, 3, bitmap.info_header.width, bitmap.info_header.height, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmap.pixel_data);
 
+	startUIModule();
+
 	while(running)
 	{
-		//render();
+
 	}
+
+	closeUIModule();
+
 }
 
 

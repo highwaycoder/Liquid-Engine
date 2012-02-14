@@ -1,7 +1,7 @@
 PARENTDIRECTORY = ..
 
 UIMODULE = ./UIModule
-UIMODULEOBJS = EngineCanvas.o UIApp.o
+UIMODULEOBJS = UIModule.o EngineCanvas.o EditorWindow.o EngineWindow.o UIApp.o
 
 UIMODULEFLAGS = $(shell wx-config --cppflags)
 UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
@@ -77,7 +77,7 @@ UtilityModuleObjects: $(UTILITYMODULE)/*.cpp
 
 
 clean:
-	rm -f *.o
+	rm -f *.o main
 	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
 	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
 	rm -f $(UIMODULE)/*.o $(UIMODULE)/*.a $(UIMODULE)/*.so
