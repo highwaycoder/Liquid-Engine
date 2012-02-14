@@ -1,29 +1,34 @@
 PARENTDIRECTORY = ..
 
 UIMODULE = ./UIModule
-UIMODULEOBJS = EngineCanvas.o UIApp.o control.o
+UIMODULEOBJS = EngineCanvas.o UIApp.o
 
 UIMODULEFLAGS = $(shell wx-config --cppflags)
 UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
 
+RENDERMODULE = ./RenderModule
+RENDERMODULEOBJS = Render.o
+
+RENDERMODULELIBS = -lGL -lGLU 
+
 ASSETMODULE = ./AssetModule
-ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o Face.o Model.o TextureSample2D.o
+ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o TextureCoordinate.o Normal.o Face.o Model.o TextureSample2D.o
 
 UTILITYMODULE = ./UtilityModule
 UTILITYMODULEOBS = StringProcessing.o
 
-LIBS = -lGL -lGLU -lglfw
+LIBS = -lglfw
 
 CC = g++
 
-all: main.o AssetModule UtilityModule
-	$(CC) main.o -o main -L$(ASSETMODULE) $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS)
+all: main.o AssetModule UtilityModule UIModule.a RenderModule
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS)
 
 main.o: main.cpp
 	$(CC) -c main.cpp
 
-UIModule: UIModuleObjects
-	cd $(UIMODULE); $(CC) $(UIMODULEOBJS) $(UIMODULELIBS)
+
+UIModule: UIModule.so UIModule.a
 
 UIModule.so: UIModuleObjects
 	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
@@ -33,6 +38,19 @@ UIModule.a: UIModuleObjects
 
 UIModuleObjects:
 	cd $(UIMODULE); $(CC) -c *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
+
+
+RenderModule: RenderModule.so RenderModule.a
+
+RenderModule.so: RenderModuleObjects
+	cd $(RENDERMODULE); $(CC) -shared -o RenderModule.so $(RENDERMODULEOBJS) $(RENDERMODULELIBS)
+
+RenderModule.a: UIModuleObjects
+	cd $(RENDERMODULE); ar rs RenderModule.a $(RENDERMODULEOBJS)
+
+RenderModuleObjects:
+	cd $(RENDERMODULE); $(CC) -c *.cpp $(RENDERMODULEFLAGS) -I$(PARENTDIRECTORY)
+
 
 AssetModule: AssetModule.so AssetModule.a
 
@@ -63,4 +81,4 @@ clean:
 	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
 	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
 	rm -f $(UIMODULE)/*.o $(UIMODULE)/*.a $(UIMODULE)/*.so
-
+	rm -f $(RENDERMODULE)/*.o $(RENDERMODULE)/*.a $(RENDERMODULE)/*.so
