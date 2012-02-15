@@ -44,7 +44,7 @@ void close()
 
 int main(int argc, char** argv)
 {
-	Model* model = loadObj("hex.obj");
+	//Model* model = loadObj("hex.obj");
 
 
 	running = 1;

@@ -4,7 +4,7 @@ UIMODULE = ./UIModule
 UIMODULEOBJS = UIModule.o EngineCanvas.o EditorWindow.o EngineWindow.o UIApp.o
 
 UIMODULEFLAGS = $(shell wx-config --cppflags)
-UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
+UIMODULELIBS = $(shell wx-config --libs --gl-libs)
 
 RENDERMODULE = ./RenderModule
 RENDERMODULEOBJS = Render.o CompositeRender.o
