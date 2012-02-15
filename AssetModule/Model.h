@@ -12,7 +12,9 @@
 
 #include "GeometryType.h"
 
-class Model
+#include "IGeometryProvider.h"
+
+class Model : IGeometryProvider
 {
 	private:
 		std::vector<Face> m_faces;
@@ -24,7 +26,6 @@ class Model
 		Model();
 
 		void addFace(Face&);
-		std::vector<Face> getFaces() const;
 
 		void addVertex(Vertex&);
 		void addTextureCoordinate(TextureCoordinate&);
@@ -32,7 +33,14 @@ class Model
 
 		bool isValid() const;
 
-		enum GeometryType getPrimitiveType() const;
+
+		virtual enum GeometryType getPrimitiveType() const;
+
+		virtual std::vector<Face> const& getFaces() const;
+
+		virtual std::vector<Vertex> const& getVertices() const;
+		virtual std::vector<TextureCoordinate> const& getTextureCoordinates() const;
+		virtual std::vector<Normal> const& getNormals() const;
 };
 
 #endif

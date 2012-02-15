@@ -7,7 +7,7 @@ UIMODULEFLAGS = $(shell wx-config --cppflags)
 UIMODULELIBS = $(shell wx-config --libs --gl-libs) -lglut
 
 RENDERMODULE = ./RenderModule
-RENDERMODULEOBJS = Render.o
+RENDERMODULEOBJS = Render.o CompositeRender.o
 
 RENDERMODULELIBS = -lGL -lGLU 
 
@@ -22,7 +22,7 @@ LIBS = -lglfw
 CC = g++
 
 all: main.o AssetModule UtilityModule UIModule.a RenderModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(RENDERMODULE)/RenderModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
 
 main.o: main.cpp
 	$(CC) -c main.cpp
@@ -37,7 +37,7 @@ UIModule.a: UIModuleObjects
 	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
 
 UIModuleObjects:
-	cd $(UIMODULE); $(CC) -c *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
+	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 
 RenderModule: RenderModule.so RenderModule.a
@@ -49,7 +49,7 @@ RenderModule.a: UIModuleObjects
 	cd $(RENDERMODULE); ar rs RenderModule.a $(RENDERMODULEOBJS)
 
 RenderModuleObjects:
-	cd $(RENDERMODULE); $(CC) -c *.cpp $(RENDERMODULEFLAGS) -I$(PARENTDIRECTORY)
+	cd $(RENDERMODULE); $(CC) -c -fpic *.cpp $(RENDERMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 
 AssetModule: AssetModule.so AssetModule.a

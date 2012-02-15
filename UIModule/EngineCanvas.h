@@ -3,6 +3,9 @@
 
 #include "wx/wx.h"
 #include "wx/glcanvas.h"
+#include "wx/window.h"
+
+#include "RenderModule/CompositeRender.h"
 
 class EngineCanvas : public wxGLCanvas
 {
@@ -10,9 +13,16 @@ class EngineCanvas : public wxGLCanvas
 
 	public:
 		EngineCanvas(wxFrame* parent);
+
+		EngineCanvas(wxWindow* parent);
+
+
 		void Paintit(wxPaintEvent& event);
 	protected:
 		DECLARE_EVENT_TABLE()
+
+	private:
+		CompositeRender render;
 };
 
 #endif

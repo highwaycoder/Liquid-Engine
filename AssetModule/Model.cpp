@@ -11,13 +11,6 @@ void Model::addFace(Face& face)
 	m_faces.push_back(face);
 }
 
-std::vector<Face> Model::getFaces() const
-{
-	std::vector<Face> faces(m_faces);
-
-	return faces;
-}
-
 void Model::addVertex(Vertex& vertex)
 {
 	m_vertices.push_back(vertex);
@@ -53,6 +46,27 @@ bool Model::isValid() const
 		return false; /* invalid model */
 	else
 		return true;
+}
+
+
+std::vector<Face> const& Model::getFaces() const
+{
+	return m_faces;
+}
+
+std::vector<Vertex> const& Model::getVertices() const
+{
+	return m_vertices;
+}
+
+std::vector<TextureCoordinate> const& Model::getTextureCoordinates() const
+{
+	return m_texture_coordinates;
+}
+
+std::vector<Normal> const& Model::getNormals() const
+{
+	return m_normals;
 }
 
 enum GeometryType Model::getPrimitiveType() const

@@ -8,7 +8,12 @@ EngineCanvas::EngineCanvas(wxFrame *parent) : wxGLCanvas(parent, wxID_ANY,  wxDe
 {
 
 }
- 
+
+EngineCanvas::EngineCanvas(wxWindow *parent) : wxGLCanvas(parent, wxID_ANY,  wxDefaultPosition, wxDefaultSize, 0, wxT("GLCanvas"))
+{
+
+}
+
 void EngineCanvas::Paintit(wxPaintEvent& WXUNUSED(event))
 {
 	Render();
