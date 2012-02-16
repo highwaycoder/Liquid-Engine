@@ -7,18 +7,24 @@
 
 #include "RenderModule/CompositeRender.h"
 
+#include "EngineWindow.h"
+
 class EngineCanvas : public wxGLCanvas
 {
-        void Render();
-
 	public:
-		EngineCanvas(wxFrame* parent);
+		EngineCanvas(EngineWindow*);
 
-		EngineCanvas(wxWindow* parent);
-
+		void OnKeyDown(wxKeyEvent& event);
+		void OnKeyUp(wxKeyEvent& event);
+		void OnMouseEvent(wxMouseEvent& event);
 
 		void Paintit(wxPaintEvent& event);
+
+    		void Render();
+
 	protected:
+		EngineWindow* m_parent_window;
+
 		DECLARE_EVENT_TABLE()
 
 	private:

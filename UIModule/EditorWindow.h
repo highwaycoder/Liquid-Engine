@@ -8,7 +8,7 @@
 #include "EngineCanvas.h"
 #include "EngineWindow.h"
 
-class EditorWindow : public wxFrame
+class EditorWindow : public EngineWindow
 {
 	public:
 		EditorWindow();

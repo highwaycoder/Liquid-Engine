@@ -12,6 +12,8 @@
 
 #include "UIModule/UIModule.h"
 
+#include "RenderModule/CompositeRender.h"
+
 int running = 0;
 
 void init();
@@ -57,12 +59,14 @@ int main(int argc, char** argv)
 
 	startUIModule();
 
+	CompositeRender* render = new CompositeRender;
+
 	while(running)
 	{
-
+	
 	}
 
-	closeUIModule();
+	//closeUIModule();
 
 }
 
