@@ -1,7 +1,7 @@
 PARENTDIRECTORY = ..
 
 UIMODULE = ./UIModule
-UIMODULEOBJS = UIModule.o EngineCanvas.o EditorWindow.o EngineWindow.o UIApp.o
+UIMODULEOBJS = UIModule.o EngineCanvas.o EditorWindow.o EngineWindow.o UIApp.o EngineKeyEvent.o EngineMouseEvent.o
 
 UIMODULEFLAGS = $(shell wx-config --cppflags)
 UIMODULELIBS = $(shell wx-config --libs --gl-libs)
