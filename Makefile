@@ -1,10 +1,14 @@
 PARENTDIRECTORY = ..
 
 UIMODULE = ./UIModule
-UIMODULEOBJS = UIModule.o EngineCanvas.o EditorWindow.o EngineWindow.o UIApp.o EngineKeyEvent.o EngineMouseEvent.o
+UIMODULEOBJS = EngineWindow.o EngineWindowThread.o
 
-UIMODULEFLAGS = $(shell wx-config --cppflags)
-UIMODULELIBS = $(shell wx-config --libs --gl-libs)
+#UIMODULEFLAGS = $(shell wx-config --cppflags)
+#UIMODULELIBS = $(shell wx-config --libs --gl-libs)
+
+UIMODULEFLAGS = 
+UIMODULELIBS = 
+
 
 RENDERMODULE = ./RenderModule
 RENDERMODULEOBJS = Render.o CompositeRender.o
@@ -17,12 +21,12 @@ ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o TextureCoord
 UTILITYMODULE = ./UtilityModule
 UTILITYMODULEOBS = StringProcessing.o
 
-LIBS = -lglfw -lsfml-window
+LIBS = -lglfw -lsfml-window -lsfml-system
 
 CC = g++
 
-all: main.o AssetModule UtilityModule RenderModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
+all: main.o AssetModule UtilityModule RenderModule UIModule
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
 
 main.o: main.cpp
 	$(CC) -c main.cpp
@@ -31,13 +35,13 @@ main.o: main.cpp
 UIModule: UIModule.so UIModule.a
 
 UIModule.so: UIModuleObjects
-#	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
+	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
 
 UIModule.a: UIModuleObjects
-#	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
+	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
 
 UIModuleObjects:
-#	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
+	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 
 RenderModule: RenderModule.so RenderModule.a

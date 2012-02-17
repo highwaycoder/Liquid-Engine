@@ -13,6 +13,8 @@
 
 #include "RenderModule/CompositeRender.h"
 
+#include "UIModule/EngineWindow.h"
+
 #include <SFML/Window.hpp>
 
 int running = 0;
@@ -52,8 +54,10 @@ int main(int argc, char** argv)
 
 	running = 1;
 
-	sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL");
-	sf::Window App2(sf::VideoMode(800, 600, 32), "SFML OpenGL");
+	EngineWindow w;
+
+	//sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL");
+	//sf::Window App2(sf::VideoMode(800, 600, 32), "SFML OpenGL");
 
 	//struct Bitmap bitmap = loadBMP("./samples/wood.bmp");
 	//struct Targa targa = loadTGA("./samples/tex.tga");
