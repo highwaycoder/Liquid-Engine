@@ -17,12 +17,12 @@ ASSETMODULEOBJS = BitmapLoader.o TargaLoader.o ObjLoader.o Vertex.o TextureCoord
 UTILITYMODULE = ./UtilityModule
 UTILITYMODULEOBS = StringProcessing.o
 
-LIBS = -lglfw
+LIBS = -lglfw -lsfml-window
 
 CC = g++
 
-all: main.o AssetModule UtilityModule UIModule.a RenderModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(UIMODULE)/UIModule.a $(RENDERMODULE)/RenderModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
+all: main.o AssetModule UtilityModule RenderModule
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
 
 main.o: main.cpp
 	$(CC) -c main.cpp
@@ -31,13 +31,13 @@ main.o: main.cpp
 UIModule: UIModule.so UIModule.a
 
 UIModule.so: UIModuleObjects
-	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
+#	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
 
 UIModule.a: UIModuleObjects
-	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
+#	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
 
 UIModuleObjects:
-	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
+#	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 
 RenderModule: RenderModule.so RenderModule.a
