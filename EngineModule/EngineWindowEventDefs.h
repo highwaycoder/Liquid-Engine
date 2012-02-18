@@ -1,6 +1,8 @@
 #ifndef __H_ENGINEWINDOWEVENTDEFS__
 #define __H_ENGINEWINDOWEVENTDEFS__
 
+#include <stdint.h>
+
 enum KeyCode
 {
 	A = 'a',

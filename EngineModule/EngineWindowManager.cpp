@@ -1,5 +1,8 @@
 #include "EngineWindowManager.h"
 
+#include <list>
+#include <stdio.h>
+#include "EngineWindow.h"
 #include "EngineWindowEventDefs.h"
 
 EngineWindowManager::EngineWindowManager()

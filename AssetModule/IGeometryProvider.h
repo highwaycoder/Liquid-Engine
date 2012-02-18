@@ -3,13 +3,13 @@
 
 #include <vector>
 
-#include "Face.h"
-
-#include "Vertex.h"
-#include "TextureCoordinate.h"
-#include "Normal.h"
-
 #include "GeometryType.h"
+
+/* Forward declarations */
+class Face;
+class Vertex;
+class TextureCoordinate;
+class Normal;
 
 class IGeometryProvider
 {

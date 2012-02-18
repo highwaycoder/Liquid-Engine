@@ -1,5 +1,17 @@
 #include "ObjLoader.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+#include <cstring>
+
+#include "Vertex.h"
+#include "Normal.h"
+#include "TextureCoordinate.h"
+
+#include "Face.h"
+#include "Model.h"
+
 #include "UtilityModule/StringProcessing.h"
 
 Model* loadObj(const char* path)

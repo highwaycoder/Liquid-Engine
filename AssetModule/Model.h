@@ -4,15 +4,14 @@
 #include <vector>
 #include <stdint.h>
 
-#include "Vertex.h"
-#include "TextureCoordinate.h"
-#include "Normal.h"
-
-#include "Face.h"
-
 #include "GeometryType.h"
-
 #include "IGeometryProvider.h"
+
+/* Forward declarations */
+class Face;
+class Vertex;
+class TextureCoordinate;
+class Normal;
 
 class Model : IGeometryProvider
 {

@@ -2,14 +2,11 @@
 #define __H_ENGINEWINDOWMANAGER__
 
 #include <list>
-#include <stdint.h>
-#include <stdio.h>
 
-#include "EngineWindow.h"
-
-#include "EngineWindowEventDefs.h"
-
+/* Forward declarations */
 class EngineWindow;
+class KeyEvent;
+class MouseEvent;
 
 class EngineWindowManager
 {

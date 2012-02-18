@@ -1,5 +1,8 @@
 #include "TargaLoader.h"
 
+#include "UtilityModule/StringProcessing.h"
+#include "Targa.h"
+
 struct Targa loadTGA(const char* path)
 {
 	FILE* file;

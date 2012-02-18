@@ -1,5 +1,10 @@
 #include "Model.h"
 
+#include "Vertex.h"
+#include "TextureCoordinate.h"
+#include "Normal.h"
+#include "Face.h"
+
 Model::Model()
 {
 

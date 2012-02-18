@@ -1,5 +1,8 @@
 #include "BitmapLoader.h"
 
+#include "UtilityModule/StringProcessing.h"
+#include "Bitmap.h"
+
 struct Bitmap loadBMP(const char* path)
 {
 	FILE* file;
