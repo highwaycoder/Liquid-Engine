@@ -3,9 +3,10 @@
 
 #include <SFML/Window.hpp>
 
-#include "RenderModule/CompositeRender.h"
+/* Forward declarations */
+class CompositeRender;
+class EngineEventHandler;
 
-#include "EngineEventHandler.h"
 
 class EngineWindow
 {

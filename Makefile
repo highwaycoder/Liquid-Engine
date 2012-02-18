@@ -1,5 +1,10 @@
 PARENTDIRECTORY = ..
 
+BUILDDIR = ./build
+BINDIR = ./bin
+
+LIBRARY = LiquidEngine.a
+
 ENGINEMODULE = ./EngineModule
 ENGINEMODULEOBJS = EngineWindow.o EngineWindowManager.o
 
@@ -25,64 +30,44 @@ LIBS = -lglfw -lsfml-window -lsfml-system
 
 CC = g++
 
-all: main.o AssetModule UtilityModule RenderModule EngineModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(ENGINEMODULE)/EngineModule.a $(LIBS) $(ENGINEMODULELIBS) $(ENGINEMODULEFLAGS) $(RENDERMODULELIBS) -g
+all: bindir builddir main.o AssetModule UtilityModule RenderModule EngineModule
+	$(CC) main.o -o main 
 
-main.o: main.cpp
-	$(CC) -c main.cpp
+.PHONY: UtilityModule AssetModule RenderModule EngineModule library
 
+demo:
+	$(CC) demo.cpp -o demo $(BINDIR)/$(LIBRARY) $(LIBS) $(ENGINEMODULELIBS) $(ENGINEMODULEFLAGS) $(RENDERMODULELIBS) -g
 
-EngineModule: EngineModule.so EngineModule.a
+library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
+	cd $(BUILDDIR); ar rs $(LIBRARY) *.o
+	cp $(BUILDDIR)/$(LIBRARY) $(BINDIR)/$(LIBRARY)
 
-EngineModule.so: EngineModuleObjects
-	cd $(ENGINEMODULE); $(CC) -shared -o EngineModule.so $(ENGINEMODULEOBJS) $(ENGINEMODULELIBS)
+EngineModule:
+	$(MAKE) -C $(ENGINEMODULE)
+	cp $(ENGINEMODULE)/*.o $(BUILDDIR)
 
-EngineModule.a: EngineModuleObjects
-	cd $(ENGINEMODULE); ar rs EngineModule.a $(ENGINEMODULEOBJS)
+RenderModule:
+	$(MAKE) -C $(RENDERMODULE)
+	cp $(RENDERMODULE)/*.o $(BUILDDIR)
 
-EngineModuleObjects:
-	cd $(ENGINEMODULE); $(CC) -c -fpic *.cpp $(ENGINEMODULEFLAGS) -I$(PARENTDIRECTORY)
+AssetModule:
+	$(MAKE) -C $(ASSETMODULE)
+	cp $(ASSETMODULE)/*.o $(BUILDDIR)
 
+UtilityModule:
+	$(MAKE) -C $(UTILITYMODULE)
+	cp $(UTILITYMODULE)/*.o $(BUILDDIR)
 
-RenderModule: RenderModule.so RenderModule.a
+builddir:
+	if test -d $(BUILDDIR); then echo "Directory Exists"; else mkdir $(BUILDDIR); fi
 
-RenderModule.so: RenderModuleObjects
-	cd $(RENDERMODULE); $(CC) -shared -o RenderModule.so $(RENDERMODULEOBJS) $(RENDERMODULELIBS)
-
-RenderModule.a: EngineModuleObjects
-	cd $(RENDERMODULE); ar rs RenderModule.a $(RENDERMODULEOBJS)
-
-RenderModuleObjects:
-	cd $(RENDERMODULE); $(CC) -c -fpic *.cpp $(RENDERMODULEFLAGS) -I$(PARENTDIRECTORY)
-
-
-AssetModule: AssetModule.so AssetModule.a
-
-AssetModule.so: AssetModuleObjects
-	cd $(ASSETMODULE); $(CC) -shared -o AssetModule.so $(ASSETMODULEOBJS)
-
-AssetModule.a: AssetModuleObjects
-	cd $(ASSETMODULE); ar rs AssetModule.a $(ASSETMODULEOBJS)
-
-AssetModuleObjects: $(ASSETMODULE)/*.cpp
-	cd $(ASSETMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY) 
-
-
-UtilityModule: UtilityModule.so UtilityModule.a
-
-UtilityModule.so: UtilityModuleObjects
-	cd $(UTILITYMODULE); $(CC) -shared -o UtilityModule.so $(UTILITYMODULEOBS)
-
-UtilityModule.a: UtilityModuleObjects
-	cd $(UTILITYMODULE); ar rs UtilityModule.a $(UTILITYMODULEOBS)
-
-UtilityModuleObjects: $(UTILITYMODULE)/*.cpp
-	cd $(UTILITYMODULE); $(CC) -c -fpic *.cpp -I$(PARENTDIRECTORY)
+bindir:
+	if test -d $(BINDIR); then echo "Directory Exists"; else mkdir $(BINDIR); fi
 
 
 clean:
-	rm -f *.o main
-	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
-	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
-	rm -f $(ENGINEMODULE)/*.o $(ENGINEMODULE)/*.a $(ENGINEMODULE)/*.so
-	rm -f $(RENDERMODULE)/*.o $(RENDERMODULE)/*.a $(RENDERMODULE)/*.so
+	$(MAKE) -C $(UTILITYMODULE) clean
+	$(MAKE) -C $(ASSETMODULE) clean
+	$(MAKE) -C $(RENDERMODULE) clean
+	$(MAKE) -C $(ENGINEMODULE) clean
+

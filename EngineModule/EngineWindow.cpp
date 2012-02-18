@@ -1,6 +1,7 @@
 #include "EngineWindow.h"
+#include "RenderModule/CompositeRender.h"
 
-#include "EngineWindowEventDefs.h"
+
 
 EngineWindow::EngineWindow()
 {
@@ -22,3 +23,4 @@ void EngineWindow::render() const
 {
 	m_render->Render();
 }
+
