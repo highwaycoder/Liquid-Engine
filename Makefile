@@ -1,13 +1,13 @@
 PARENTDIRECTORY = ..
 
-UIMODULE = ./UIModule
-UIMODULEOBJS = EngineWindow.o EngineWindowThread.o
+ENGINEMODULE = ./EngineModule
+ENGINEMODULEOBJS = EngineWindow.o EngineWindowManager.o
 
-#UIMODULEFLAGS = $(shell wx-config --cppflags)
-#UIMODULELIBS = $(shell wx-config --libs --gl-libs)
+#ENGINEMODULEFLAGS = $(shell wx-config --cppflags)
+#ENGINEMODULELIBS = $(shell wx-config --libs --gl-libs)
 
-UIMODULEFLAGS = 
-UIMODULELIBS = 
+ENGINEMODULEFLAGS = 
+ENGINEMODULELIBS = 
 
 
 RENDERMODULE = ./RenderModule
@@ -25,23 +25,23 @@ LIBS = -lglfw -lsfml-window -lsfml-system
 
 CC = g++
 
-all: main.o AssetModule UtilityModule RenderModule UIModule
-	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(UIMODULE)/UIModule.a $(LIBS) $(UIMODULELIBS) $(UIMODULEFLAGS) $(RENDERMODULELIBS) -g
+all: main.o AssetModule UtilityModule RenderModule EngineModule
+	$(CC) main.o -o main $(ASSETMODULE)/AssetModule.a $(UTILITYMODULE)/UtilityModule.a $(RENDERMODULE)/RenderModule.a $(ENGINEMODULE)/EngineModule.a $(LIBS) $(ENGINEMODULELIBS) $(ENGINEMODULEFLAGS) $(RENDERMODULELIBS) -g
 
 main.o: main.cpp
 	$(CC) -c main.cpp
 
 
-UIModule: UIModule.so UIModule.a
+EngineModule: EngineModule.so EngineModule.a
 
-UIModule.so: UIModuleObjects
-	cd $(UIMODULE); $(CC) -shared -o UIModule.so $(UIMODULEOBJS) $(UIMODULELIBS)
+EngineModule.so: EngineModuleObjects
+	cd $(ENGINEMODULE); $(CC) -shared -o EngineModule.so $(ENGINEMODULEOBJS) $(ENGINEMODULELIBS)
 
-UIModule.a: UIModuleObjects
-	cd $(UIMODULE); ar rs UIModule.a $(UIMODULEOBJS)
+EngineModule.a: EngineModuleObjects
+	cd $(ENGINEMODULE); ar rs EngineModule.a $(ENGINEMODULEOBJS)
 
-UIModuleObjects:
-	cd $(UIMODULE); $(CC) -c -fpic *.cpp $(UIMODULEFLAGS) -I$(PARENTDIRECTORY)
+EngineModuleObjects:
+	cd $(ENGINEMODULE); $(CC) -c -fpic *.cpp $(ENGINEMODULEFLAGS) -I$(PARENTDIRECTORY)
 
 
 RenderModule: RenderModule.so RenderModule.a
@@ -49,7 +49,7 @@ RenderModule: RenderModule.so RenderModule.a
 RenderModule.so: RenderModuleObjects
 	cd $(RENDERMODULE); $(CC) -shared -o RenderModule.so $(RENDERMODULEOBJS) $(RENDERMODULELIBS)
 
-RenderModule.a: UIModuleObjects
+RenderModule.a: EngineModuleObjects
 	cd $(RENDERMODULE); ar rs RenderModule.a $(RENDERMODULEOBJS)
 
 RenderModuleObjects:
@@ -84,5 +84,5 @@ clean:
 	rm -f *.o main
 	rm -f $(ASSETMODULE)/*.o $(ASSETMODULE)/*.a $(ASSETMODULE)/*.so
 	rm -f $(UTILITYMODULE)/*.o $(UTILITYMODULE)/*.a $(UTILITYMODULE)/*.so
-	rm -f $(UIMODULE)/*.o $(UIMODULE)/*.a $(UIMODULE)/*.so
+	rm -f $(ENGINEMODULE)/*.o $(ENGINEMODULE)/*.a $(ENGINEMODULE)/*.so
 	rm -f $(RENDERMODULE)/*.o $(RENDERMODULE)/*.a $(RENDERMODULE)/*.so

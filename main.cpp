@@ -13,6 +13,7 @@
 
 #include "RenderModule/CompositeRender.h"
 
+#include "UIModule/EngineWindowManager.h"
 #include "UIModule/EngineWindow.h"
 
 #include <SFML/Window.hpp>
@@ -54,8 +55,6 @@ int main(int argc, char** argv)
 
 	running = 1;
 
-	EngineWindow w;
-
 	//sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL");
 	//sf::Window App2(sf::VideoMode(800, 600, 32), "SFML OpenGL");
 
@@ -66,11 +65,29 @@ int main(int argc, char** argv)
 
 	//startUIModule();
 
+
+	// Set color and depth clear value
+	glClearDepth(1.f);
+	glClearColor(1.f, 0.f, 0.f, 0.f);
+
+	// Enable Z-buffer read and write
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	// Setup a perspective projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(90.f, 1.f, 1.f, 500.f);
+
 	CompositeRender* render = new CompositeRender;
 
-	while(running)
+	EngineWindowManager manager;
+
+	manager.createWindow();
+
+	while(1)
 	{
-	
+		manager.processWindows();
 	}
 
 	//closeUIModule();
