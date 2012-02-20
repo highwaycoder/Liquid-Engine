@@ -1,20 +1,68 @@
-CC = g++
+#Set these accordingly to build for your platform of choice
+BUILDPLATFORM = linux#possible choices: linux, win32mingw
+TARGETPLATFORM = linux32#possible choices: linux32, linux64, win32
 
-PARENTDIRECTORY = ..
+#Set according to your available tools. Default assumption is that you're using GCC / MinGW
+CC = g++
+AR = ar
+
+#Don't touch anything below here unless you feel inclined to do something clever purely of your own volition
+PROJECTROOT = ..
 BUILDDIR = ./build
 BINDIR = ./bin
 
-LIBRARY = LiquidEngine.a
+LIBRARYBINARY = LiquidEngine.a
 
 ENGINEMODULE = ./EngineModule
 RENDERMODULE = ./RenderModule
 ASSETMODULE = ./AssetModule
 UTILITYMODULE = ./UtilityModule
 
-RENDERMODULELIBS = -lGL -lGLU 
+LIBSDIR = ../lib
+INCLDIR = ../include
+
+ADDITIONALINCLUDES = -L$(INCLDIR)
+
+RENDERMODULELIBS = -lGL -lGLU
 ENGINEMODULELIBS = -lsfml-window -lsfml-system
 
-LIBS = 
+#Here's where the platform logic begins, so prepare yourself for an adventure in inanity
+
+#COPY or CP?
+ifeq ($(BUILDPLATFORM), win32mingw)
+	CP = copy
+else ifeq ($(BUILDPLATFORM), linux32)
+	CP = cp
+else ifeq ($(BUILDPLATFORM), linux64)
+	CP = cp
+endif
+
+#Which OpenGL libs should we link to? (OS-Specific)
+OPENGLLIBS=
+ifeq ($(TARGETPLATFORM),win32)
+	OPENGLLIBS=-lopengl32 -lglu32
+endif
+ifeq ($(TARGETPLATFORM),linux32)
+	OPENGLLIBS=-lGL -lGLU
+endif
+ifeq ($(TARGETPLATFORM),linux64)
+	OPENGLLIBS=-lGL -lGLU
+endif
+
+#Here's all other configured logic:
+
+#SFML linking
+LINKING=
+ifeq ($(TARGETPLATFORM),win32)
+	LINKING = $(LIBSDIR)/SFML/win32/libsfml-system-d.a $(LIBSDIR)/SFML/win32/libsfml-window-d.a
+endif
+ifeq ($(TARGETPLATFORM),linux32)
+	LINKING = -lsfml-window -lsfml-system
+endif
+ifeq ($(TARGETPLATFORM),linux64)
+	LINKING = -lsfml-window -lsfml-system
+endif
+
 
 
 all: library demo
@@ -22,14 +70,14 @@ all: library demo
 .PHONY: UtilityModule AssetModule RenderModule EngineModule library demo
 
 demo: demo.o library
-	$(CC) demo.o -o demo $(BINDIR)/$(LIBRARY) $(LIBS) $(ENGINEMODULELIBS) $(RENDERMODULELIBS) -g
+	$(CC) demo.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
 
 demo.o:
-	$(CC) -c demo.cpp
+	$(CC) -c demo.cpp -I../include
 
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
-	cd $(BUILDDIR); ar rs $(LIBRARY) *.o
-	cp $(BUILDDIR)/$(LIBRARY) $(BINDIR)/$(LIBRARY)
+	cd $(BUILDDIR); ar rs $(LIBRARYBINARY) *.o
+	cp $(BUILDDIR)/$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
 
 EngineModule:
 	$(MAKE) -C $(ENGINEMODULE)
