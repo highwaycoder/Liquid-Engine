@@ -29,11 +29,9 @@ ENGINEMODULELIBS = -lsfml-window -lsfml-system
 #Here's where the platform logic begins, so prepare yourself for an adventure in inanity
 
 #COPY or CP?
-ifeq ($(BUILDPLATFORM), win32mingw)
+ifeq ($(BUILDPLATFORM),win32mingw)
 	CP = copy
-else ifeq ($(BUILDPLATFORM), linux32)
-	CP = cp
-else ifeq ($(BUILDPLATFORM), linux64)
+else ifeq ($(BUILDPLATFORM),linux)
 	CP = cp
 endif
 
@@ -54,7 +52,7 @@ endif
 #SFML linking
 LINKING=
 ifeq ($(TARGETPLATFORM),win32)
-	LINKING = $(LIBSDIR)/SFML/win32/libsfml-system-d.a $(LIBSDIR)/SFML/win32/libsfml-window-d.a
+	LINKING = $(LIBSDIR)/SFML/win32/libsfml-system.a $(LIBSDIR)/SFML/win32/libsfml-window.a
 endif
 ifeq ($(TARGETPLATFORM),linux32)
 	LINKING = -lsfml-window -lsfml-system
@@ -77,29 +75,45 @@ demo.o:
 
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
 	cd $(BUILDDIR); ar rs $(LIBRARYBINARY) *.o
-	cp $(BUILDDIR)/$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
+	$(CP) $(BUILDDIR)/$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
 
 EngineModule:
 	$(MAKE) -C $(ENGINEMODULE)
-	cp $(ENGINEMODULE)/*.o $(BUILDDIR)
+	$(CP) $(ENGINEMODULE)/*.o $(BUILDDIR)
 
 RenderModule:
 	$(MAKE) -C $(RENDERMODULE)
-	cp $(RENDERMODULE)/*.o $(BUILDDIR)
+	$(CP) $(RENDERMODULE)/*.o $(BUILDDIR)
 
 AssetModule:
 	$(MAKE) -C $(ASSETMODULE)
-	cp $(ASSETMODULE)/*.o $(BUILDDIR)
+	$(CP) $(ASSETMODULE)/*.o $(BUILDDIR)
 
 UtilityModule:
 	$(MAKE) -C $(UTILITYMODULE)
-	cp $(UTILITYMODULE)/*.o $(BUILDDIR)
+	$(CP) $(UTILITYMODULE)/*.o $(BUILDDIR)
 
 builddir:
+ifeq ($(BUILDPLATFORM),win32)
+	if exist $(BUILDDIR) echo "Directory Exists" else mkdir $(BUILDDIR)
+endif
+ifeq ($(BUILDPLATFORM),linux32)
 	if test -d $(BUILDDIR); then echo "Directory Exists"; else mkdir $(BUILDDIR); fi
+endif
+ifeq ($(BUILDPLATFORM),linux64)
+	if test -d $(BUILDDIR); then echo "Directory Exists"; else mkdir $(BUILDDIR); fi
+endif
 
 bindir:
+ifeq ($(BUILDPLATFORM),win32)
+	if exist $(BINDIR) echo "Directory Exists" else mkdir $(BINDIR)
+endif
+ifeq ($(BUILDPLATFORM),linux32)
 	if test -d $(BINDIR); then echo "Directory Exists"; else mkdir $(BINDIR); fi
+endif
+ifeq ($(BUILDPLATFORM),linux64)
+	if test -d $(BINDIR); then echo "Directory Exists"; else mkdir $(BINDIR); fi
+endif
 
 
 clean:
