@@ -68,6 +68,15 @@ ifeq ($(BUILDPLATFORM),win32mingw)
 	PATHSEPARATOR=\\#must be escaped. Stupid.
 endif
 
+#Which remove command are we using?
+REMOVE=
+ifeq ($(BUILDPLATFORM),win32mingw)
+	REMOVE=del
+else
+	REMOVE=rm -rf
+endif
+
+REMOVE=del
 
 all: library demo
 
@@ -130,5 +139,6 @@ clean:
 	$(MAKE) -C $(ASSETMODULE) clean
 	$(MAKE) -C $(RENDERMODULE) clean
 	$(MAKE) -C $(ENGINEMODULE) clean
-	rm -rf demo.o
-	rm -rf demo
+
+	$(REMOVE) demo.o
+	$(REMOVE) demo
