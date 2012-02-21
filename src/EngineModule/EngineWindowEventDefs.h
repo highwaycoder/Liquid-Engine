@@ -41,7 +41,7 @@ enum KeyCode
 	Num7 = '7',
 	Num8 = '8',
 	Num9 = '9', 
-	Escape = 256,
+	EscapeKey = 256, //causes issues on windows if just "Escape"
 	LControl,
 	LShift,
 	LAlt,

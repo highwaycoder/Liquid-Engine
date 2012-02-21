@@ -1,6 +1,6 @@
 #Set these accordingly to build for your platform of choice
-BUILDPLATFORM = linux#possible choices: linux, win32mingw
-TARGETPLATFORM = linux32#possible choices: linux32, linux64, win32
+BUILDPLATFORM = win32mingw#possible choices: linux, win32mingw
+TARGETPLATFORM = win32#possible choices: linux32, linux64, win32
 
 #Set according to your available tools. Default assumption is that you're using GCC / MinGW
 CC = g++
@@ -8,15 +8,17 @@ AR = ar
 
 #Don't touch anything below here unless you feel inclined to do something clever purely of your own volition
 PROJECTROOT = ..
-BUILDDIR = ./build
-BINDIR = ./bin
+BUILDDIR = build
+BINDIR = bin
 
 LIBRARYBINARY = LiquidEngine.a
 
-ENGINEMODULE = ./EngineModule
-RENDERMODULE = ./RenderModule
-ASSETMODULE = ./AssetModule
-UTILITYMODULE = ./UtilityModule
+PATHSEPARATOR=/
+
+ENGINEMODULE = EngineModule
+RENDERMODULE = RenderModule
+ASSETMODULE = AssetModule
+UTILITYMODULE = UtilityModule
 
 LIBSDIR = ../lib
 INCLDIR = ../include
@@ -61,11 +63,15 @@ ifeq ($(TARGETPLATFORM),linux64)
 	LINKING = -lsfml-window -lsfml-system
 endif
 
+#Do we need to replace path separators?
+ifeq ($(BUILDPLATFORM),win32mingw)
+	PATHSEPARATOR=\\#must be escaped. Stupid.
+endif
 
 
 all: library demo
 
-.PHONY: UtilityModule AssetModule RenderModule EngineModule library demo
+.PHONY: UtilityModule AssetModule RenderModule EngineModule library demo bindir builddir
 
 demo: demo.o library
 	$(CC) demo.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
@@ -74,28 +80,31 @@ demo.o:
 	$(CC) -c demo.cpp -I../include
 
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
-	cd $(BUILDDIR); ar rs $(LIBRARYBINARY) *.o
-	$(CP) $(BUILDDIR)/$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
+	cd $(BUILDDIR) & ar rs $(LIBRARYBINARY) *.o
+	$(CP) $(BUILDDIR)$(PATHSEPARATOR)$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
 
 EngineModule:
 	$(MAKE) -C $(ENGINEMODULE)
-	$(CP) $(ENGINEMODULE)/*.o $(BUILDDIR)
+	$(CP) $(ENGINEMODULE)$(PATHSEPARATOR)*.o $(BUILDDIR)
 
 RenderModule:
 	$(MAKE) -C $(RENDERMODULE)
-	$(CP) $(RENDERMODULE)/*.o $(BUILDDIR)
+	$(CP) $(RENDERMODULE)$(PATHSEPARATOR)*.o $(BUILDDIR)
 
 AssetModule:
 	$(MAKE) -C $(ASSETMODULE)
-	$(CP) $(ASSETMODULE)/*.o $(BUILDDIR)
+	$(CP) $(ASSETMODULE)$(PATHSEPARATOR)*.o $(BUILDDIR)
 
 UtilityModule:
 	$(MAKE) -C $(UTILITYMODULE)
-	$(CP) $(UTILITYMODULE)/*.o $(BUILDDIR)
+
+	$(CP) $(UTILITYMODULE)$(PATHSEPARATOR)*.o $(BUILDDIR)
+
+
 
 builddir:
-ifeq ($(BUILDPLATFORM),win32)
-	if exist $(BUILDDIR) echo "Directory Exists" else mkdir $(BUILDDIR)
+ifeq ($(BUILDPLATFORM),win32mingw)
+	if exist $(BUILDDIR) (echo "Directory Exists") else (mkdir $(BUILDDIR))
 endif
 ifeq ($(BUILDPLATFORM),linux32)
 	if test -d $(BUILDDIR); then echo "Directory Exists"; else mkdir $(BUILDDIR); fi
@@ -105,8 +114,8 @@ ifeq ($(BUILDPLATFORM),linux64)
 endif
 
 bindir:
-ifeq ($(BUILDPLATFORM),win32)
-	if exist $(BINDIR) echo "Directory Exists" else mkdir $(BINDIR)
+ifeq ($(BUILDPLATFORM),win32mingw)
+	if exist $(BINDIR) (echo "Directory Exists") else (mkdir $(BINDIR))
 endif
 ifeq ($(BUILDPLATFORM),linux32)
 	if test -d $(BINDIR); then echo "Directory Exists"; else mkdir $(BINDIR); fi
