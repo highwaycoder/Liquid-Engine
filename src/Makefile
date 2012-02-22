@@ -1,6 +1,6 @@
 #Set these accordingly to build for your platform of choice
-BUILDPLATFORM = linux#possible choices: linux, win32mingw
-TARGETPLATFORM = linux32#possible choices: linux32, linux64, win32
+BUILDPLATFORM = win32mingw#possible choices: linux, win32mingw
+TARGETPLATFORM = win32#possible choices: linux32, linux64, win32
 
 #Set according to your available tools. Default assumption is that you're using GCC / MinGW
 CC = g++
@@ -94,11 +94,12 @@ DemoEventHandler.o:
 
 
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
-ifeq ($(BUILDPLATFORM),win32)
+ifeq ($(BUILDPLATFORM),win32mingw)
 	cd $(BUILDDIR) & ar rs $(LIBRARYBINARY) *.o
 else
 	cd $(BUILDDIR); ar rs $(LIBRARYBINARY) *.o
 endif
+
 	$(CP) $(BUILDDIR)$(PATHSEPARATOR)$(LIBRARYBINARY) $(BINDIR)$(PATHSEPARATOR)$(LIBRARYBINARY)
 
 EngineModule:
