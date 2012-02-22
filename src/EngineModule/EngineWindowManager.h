@@ -3,13 +3,16 @@
 
 #include <list>
 
+#include "EngineWindow.h"
+
 /* Forward declarations */
-class EngineWindow;
+class EngineApplication;
 class KeyEvent;
 class MouseEvent;
 
 class EngineWindowManager
 {
+	friend class EngineApplication;
 
 	private:
 		std::list<EngineWindow*> m_windows;
@@ -20,8 +23,9 @@ class EngineWindowManager
 
 		EngineWindow* createWindow();
 
-		void processWindows();
-	
+		void dispatchEvents();
+		void renderFrames();	
+
 		void onWindowPaint(EngineWindow* window);
 		void onWindowClose(EngineWindow* window);
 
@@ -30,7 +34,7 @@ class EngineWindowManager
 
 		void onMouseMoved(EngineWindow* window, MouseEvent&);
 		void onMouseClicked(EngineWindow* window, MouseEvent&);
-
+		void onMouseReleased(EngineWindow* window, MouseEvent&);
 };
 
 #endif

@@ -1,6 +1,6 @@
 #Set these accordingly to build for your platform of choice
-BUILDPLATFORM = win32mingw#possible choices: linux, win32mingw
-TARGETPLATFORM = win32#possible choices: linux32, linux64, win32
+BUILDPLATFORM = linux#possible choices: linux, win32mingw
+TARGETPLATFORM = linux32#possible choices: linux32, linux64, win32
 
 #Set according to your available tools. Default assumption is that you're using GCC / MinGW
 CC = g++
@@ -76,21 +76,30 @@ else
 	REMOVE=rm -rf
 endif
 
-REMOVE=del
-
 all: library demo
 
 .PHONY: UtilityModule AssetModule RenderModule EngineModule library demo bindir builddir
 
-demo: demo.o library
-	$(CC) demo.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
+demo: demo.o DemoApplication.o DemoEventHandler.o library
+	$(CC) demo.o DemoApplication.o DemoEventHandler.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
 
 demo.o:
 	$(CC) -c demo.cpp -I../include
 
+DemoApplication.o:
+	$(CC) -c DemoApplication.cpp -I../include
+
+DemoEventHandler.o:
+	$(CC) -c DemoEventHandler.cpp -I../include
+
+
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule
+ifeq ($(BUILDPLATFORM),win32)
 	cd $(BUILDDIR) & ar rs $(LIBRARYBINARY) *.o
-	$(CP) $(BUILDDIR)$(PATHSEPARATOR)$(LIBRARYBINARY) $(BINDIR)/$(LIBRARYBINARY)
+else
+	cd $(BUILDDIR); ar rs $(LIBRARYBINARY) *.o
+endif
+	$(CP) $(BUILDDIR)$(PATHSEPARATOR)$(LIBRARYBINARY) $(BINDIR)$(PATHSEPARATOR)$(LIBRARYBINARY)
 
 EngineModule:
 	$(MAKE) -C $(ENGINEMODULE)
@@ -141,4 +150,6 @@ clean:
 	$(MAKE) -C $(ENGINEMODULE) clean
 
 	$(REMOVE) demo.o
+	$(REMOVE) DemoApplication.o
+	$(REMOVE) DemoEventHandler.o
 	$(REMOVE) demo

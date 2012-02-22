@@ -11,6 +11,7 @@ class EngineEventHandler
 
 		virtual void onMouseMoved(MouseEvent&) = 0;
 		virtual void onMouseClicked(MouseEvent&) = 0;
+		virtual void onMouseReleased(MouseEvent&) = 0;
 };
 
 #endif

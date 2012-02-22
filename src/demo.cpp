@@ -4,20 +4,21 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "EngineModule/EngineWindowManager.h"
-#include "EngineModule/EngineWindow.h"
-
+#include "DemoApplication.h"
+#include "DemoEventHandler.h"
 
 int main(int argc, char** argv)
 {
 
-	EngineWindowManager manager;
+	DemoApplication* app = new DemoApplication();
 
-	manager.createWindow();
+	EngineWindow* window = app->getWindowManager().createWindow();
 
-	while(1)
+	window->registerEventHandler(new DemoEventHandler());
+
+	while (1)
 	{
-		manager.processWindows();
+		app->run();
 	}
 }
 
