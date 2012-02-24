@@ -1,45 +1,32 @@
 #ifndef __H_MODEL__
 #define __H_MODEL__
 
-#include <vector>
-#include <stdint.h>
+#include "stdint.h"
 
-#include "GeometryType.h"
-#include "IGeometryProvider.h"
-
-/* Forward declarations */
-class Face;
-class Vertex;
-class TextureCoordinate;
-class Normal;
-
-class Model : IGeometryProvider
+struct Vertex
 {
-	private:
-		std::vector<Face> m_faces;
+	float x;
+	float y;
+	float z;
+};
 
-		std::vector<Vertex> m_vertices;
-		std::vector<TextureCoordinate> m_texture_coordinates;
-		std::vector<Normal> m_normals;
+struct TextureCoordinate
+{
+	float u;
+	float v;
+};
+
+struct Triangle
+{
+	uint16_t vertex_index[3];
+	uint16_t texcoord_index[3];
+};
+
+class Model
+{
 	public:
 		Model();
-
-		void addFace(Face&);
-
-		void addVertex(Vertex&);
-		void addTextureCoordinate(TextureCoordinate&);
-		void addNormal(Normal&);
-
-		bool isValid() const;
-
-
-		virtual enum GeometryType getPrimitiveType() const;
-
-		virtual std::vector<Face> const& getFaces() const;
-
-		virtual std::vector<Vertex> const& getVertices() const;
-		virtual std::vector<TextureCoordinate> const& getTextureCoordinates() const;
-		virtual std::vector<Normal> const& getNormals() const;
+		~Model();
 };
 
 #endif

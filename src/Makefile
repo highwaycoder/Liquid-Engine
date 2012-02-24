@@ -1,6 +1,6 @@
 #Set these accordingly to build for your platform of choice
-BUILDPLATFORM = win32mingw#possible choices: linux, win32mingw
-TARGETPLATFORM = win32#possible choices: linux32, linux64, win32
+BUILDPLATFORM = linux#possible choices: linux, win32mingw
+TARGETPLATFORM = linux32#possible choices: linux32, linux64, win32
 
 #Set according to your available tools. Default assumption is that you're using GCC / MinGW
 CC = g++
