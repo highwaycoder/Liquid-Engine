@@ -18,8 +18,14 @@ struct TextureCoordinate
 
 struct Triangle
 {
-	uint16_t vertex_index[3];
-	uint16_t texcoord_index[3];
+	uint32_t vertex_index[3];
+	uint32_t texcoord_index[3];
+};
+
+struct Frame
+{
+	char name[64];
+	struct Vertex* vertices;
 };
 
 class Model
