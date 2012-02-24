@@ -18,6 +18,7 @@ int main(int argc, char** argv)
 
 	MD2Model model;
 	model.load("../samples/cube.md2");
+	model.debug();
 
 	printf("Size of Model: %i\n", sizeof(model));
 

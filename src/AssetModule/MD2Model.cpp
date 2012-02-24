@@ -16,6 +16,11 @@ MD2Model::~MD2Model()
 	delete[] md2_frames;
 	delete[] md2_texcoords;
 
+	/* Clear vertex data from the frame */
+	for (uint32_t frame_num = 0; frame_num < md2_num_frames; frame_num++)
+		delete[] gen_frames[frame_num].vertices; 
+
+	delete[] gen_frames;
 	delete[] gen_texcoords;
 	delete[] gen_triangles;
 }
@@ -83,6 +88,7 @@ void MD2Model::load(const char* path)
 	md2_frames = new MD2Frame[md2_num_frames];
 	md2_texcoords = new MD2TextureCoordinate[md2_num_texcoords];
 
+	gen_frames = new Frame[md2_num_frames];
 	gen_texcoords = new TextureCoordinate[md2_num_texcoords];
 	gen_triangles = new Triangle[md2_num_triangles];
 
@@ -149,10 +155,16 @@ void MD2Model::load(const char* path)
 		struct Frame gen_frame;
 
 		/* Calculate the offset to the current texture coordinate */
-		uint32_t offset = md2_offset_frames + (sizeof(struct MD2Frame) * frame_num);
+		uint32_t offset = md2_offset_frames + (md2_frame_size * frame_num);
 
 		/* Populate MD2 Frame */
 		memcpy(&md2_frame, file_memory+offset, sizeof(struct MD2Frame));
+
+		/* Allocate Vertex Data */
+		gen_frame.vertices = new Vertex[md2_num_vertices];
+
+		/* Copy Frame Name (or rather, 64 bytes of it) */
+		memcpy(&gen_frame.name, &md2_frame.name, 64);
 
 		printf("Frame %i\n", frame_num);
 
@@ -173,11 +185,28 @@ void MD2Model::load(const char* path)
 			gen_vertex.y = (md2_vertex.vertex[1] * md2_frame.scale[1]) + md2_frame.translate[1];
 			gen_vertex.z = (md2_vertex.vertex[2] * md2_frame.scale[2]) + md2_frame.translate[2];
 
-			if (frame_num < 5)
+			/* Store frame */
+			gen_frame.vertices[vertex_num] = gen_vertex;
+
 			printf("\tVertex (%f, %f, %f)\n", gen_vertex.x, gen_vertex.y, gen_vertex.z);
 		}
+
+		/* Store frame */
+		gen_frames[frame_num] = gen_frame;
 	}
 
 	/* Free file memory */
 	free(file_memory);
 }
+
+void MD2Model::debug()
+{
+	for (uint32_t frame_num = 0; frame_num < md2_num_frames; frame_num++)
+	{
+		for (uint32_t vertex_num = 0; vertex_num < md2_num_vertices; vertex_num++)
+		{
+			printf("F: %i | V: %f\n", frame_num, gen_frames[frame_num].vertices[vertex_num].x);
+		}	
+	}
+}
+

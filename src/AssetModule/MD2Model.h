@@ -62,6 +62,7 @@ class MD2Model : Model
 		struct MD2TextureCoordinate* md2_texcoords;
 
 		/* Generalized Model Data */
+		struct Frame* gen_frames;
 		struct TextureCoordinate* gen_texcoords;
 		struct Triangle* gen_triangles;
 
@@ -70,6 +71,7 @@ class MD2Model : Model
 		~MD2Model();
 
 		void load(const char* path);
+		void debug();
 };
 
 
