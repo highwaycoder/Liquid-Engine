@@ -9,7 +9,9 @@
 
 CompositeRender::CompositeRender()
 {
-	model = loadModel("../samples/container.obj");
+	model = loadModel("../samples/monkey.obj");
+
+	renderable = new StaticMeshRenderable(model);
 }
 
 void CompositeRender::Render()
@@ -24,7 +26,7 @@ void CompositeRender::Render()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -10.0f);
+	glTranslatef(0.0f, 0.0f, -4.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LEQUAL);
@@ -34,6 +36,10 @@ void CompositeRender::Render()
 	//rot = rot + 0.05;
 
 	printf("no %i\n", model->getTriangleCount());
+
+	glColor3f(1.0f,1.0f,1.0f);
+
+	renderable->render();
 
 	for (int face = 0; face < model->getTriangleCount(); face++)
 	{

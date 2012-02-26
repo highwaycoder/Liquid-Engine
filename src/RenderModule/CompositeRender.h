@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 #include "AssetModule/ModelMesh.h"
-
+#include "StaticMeshRenderable.h"
 class CompositeRender
 {
 	private:
@@ -16,6 +16,7 @@ class CompositeRender
 		virtual void Render();
 		
 		ModelMesh* model;
+		StaticMeshRenderable* renderable;
 
 		uint32_t getWidth() { return m_render_width; }
 		uint32_t getHeight() { return m_render_height; }
