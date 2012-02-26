@@ -7,24 +7,21 @@
 #include "DemoApplication.h"
 #include "DemoEventHandler.h"
 
-#include "AssetModule/MD2Model.h"
+#include "AssetModule/ModelLoader.h"
 
 int main(int argc, char** argv)
 {
 
-	//DemoApplication* app = new DemoApplication();
-	//EngineWindow* window = app->getWindowManager().createWindow();
-	//window->registerEventHandler(new DemoEventHandler());
+	DemoApplication* app = new DemoApplication();
+	EngineWindow* window = app->getWindowManager().createWindow();
+	window->registerEventHandler(new DemoEventHandler());
 
-	MD2Model model;
-	model.load("../samples/cube.md2");
-	model.debug();
 
-	printf("Size of Model: %i\n", sizeof(model));
+	loadModel("../samples/container.obj");
 
 	while (1)
 	{
-		//app->run();
+		app->run();
 	}
 }
 

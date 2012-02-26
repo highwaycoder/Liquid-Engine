@@ -2,6 +2,7 @@
 #define __H_COMPOSITERENDER__
 
 #include "stdint.h"
+#include "AssetModule/ModelMesh.h"
 
 class CompositeRender
 {
@@ -14,6 +15,8 @@ class CompositeRender
 
 		virtual void Render();
 		
+		ModelMesh* model;
+
 		uint32_t getWidth() { return m_render_width; }
 		uint32_t getHeight() { return m_render_height; }
 		

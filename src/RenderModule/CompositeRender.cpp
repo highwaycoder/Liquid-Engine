@@ -5,33 +5,40 @@
 
 #include "stdio.h"
 
+#include "AssetModule/ModelLoader.h"
+
 CompositeRender::CompositeRender()
 {
-
+	model = loadModel("../samples/container.obj");
 }
 
 void CompositeRender::Render()
 {
-	glMatrixMode( GL_PROJECTION );
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, 200, 200, 0, -1, 1 );
+
+	gluPerspective(45.0f, 1.0, 0.1f, 40.0f);
 
 	glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -10.0f);
 
-	glClearColor(1.0, 0.0, 0.0, 0.0);
-	glClear(GL_COLOR_BUFFER_BIT);
- 
-	glBegin( GL_QUADS );
-    
-		glColor4f( 1.0, 1.0, 0.0, 1.0 );
+	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LEQUAL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		glVertex3f( 0,            0,             0 );
-		glVertex3f( 20, 0,             0 );
-		glVertex3f( 20, 20, 0 );
-		glVertex3f( 0,            20, 0 );
+	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+	//rot = rot + 0.05;
 
-	glEnd();
+	printf("no %i\n", model->getTriangleCount());
+
+	for (int face = 0; face < model->getTriangleCount(); face++)
+	{
+		printf("Face: %i of %i\n\n", face, model->getTriangleCount());
+	}
 
 	glFlush();
 }

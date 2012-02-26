@@ -26,6 +26,7 @@ INCLDIR = ../include
 ADDITIONALINCLUDES = -L$(INCLDIR)
 
 RENDERMODULELIBS = -lGL -lGLU
+ASSETMODULELIBS = -lassimp
 ENGINEMODULELIBS = -lsfml-window -lsfml-system
 
 #Here's where the platform logic begins, so prepare yourself for an adventure in inanity
@@ -81,7 +82,7 @@ all: library demo
 .PHONY: UtilityModule AssetModule RenderModule EngineModule library demo bindir builddir
 
 demo: demo.o DemoApplication.o DemoEventHandler.o library
-	$(CC) demo.o DemoApplication.o DemoEventHandler.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
+	$(CC) demo.o DemoApplication.o DemoEventHandler.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(ASSETMODULELIBS) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
 
 demo.o:
 	$(CC) -c demo.cpp -I../include
