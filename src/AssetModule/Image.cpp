@@ -1,6 +1,6 @@
-#include "TextureSample2D.h"
+#include "Image.h"
 
-TextureSample2D::TextureSample2D(uint32_t height, uint32_t width, uint8_t bits_per_pixel)
+Image::Image(uint32_t height, uint32_t width, uint8_t bits_per_pixel)
 {
 	uint8_t bytes_per_pixel = bits_per_pixel / 8;
 	uint64_t data_size = width * height * bytes_per_pixel;
@@ -14,7 +14,7 @@ TextureSample2D::TextureSample2D(uint32_t height, uint32_t width, uint8_t bits_p
 	memset(m_data, 0, data_size);
 }
 
-TextureSample2D::TextureSample2D(uint32_t height, uint32_t width, uint8_t bits_per_pixel, unsigned char* data)
+Image::Image(uint32_t height, uint32_t width, uint8_t bits_per_pixel, const unsigned char* data)
 {
 	uint8_t bytes_per_pixel = bits_per_pixel / 8;
 	uint64_t data_size = width * height * bytes_per_pixel;

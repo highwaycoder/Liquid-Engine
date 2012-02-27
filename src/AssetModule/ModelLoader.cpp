@@ -32,6 +32,8 @@ ModelMesh* loadModel(char* path)
 		uint32_t num_vertices = aimesh->mNumVertices;
 		uint32_t num_triangles = aimesh->mNumFaces;
 
+		uint32_t num_texcoords = aimesh->mNumVertices;
+
 		/* Store vertices */
 		for (uint32_t vertex_index = 0; vertex_index < num_vertices; vertex_index++)
 		{
@@ -41,6 +43,21 @@ ModelMesh* loadModel(char* path)
 			vertex.z = aimesh->mVertices[vertex_index].z;
 
 			mesh->addVertex(vertex);
+		}
+
+		/* Store texture coordinates */
+		for (uint32_t texcoord_index = 0; texcoord_index < num_texcoords; texcoord_index++)
+		{
+			struct TextureCoordinate texcoord;
+
+			if (aimesh->HasTextureCoords(0))
+			{
+				texcoord.u = aimesh->mTextureCoords[0][texcoord_index].x;
+				texcoord.v = aimesh->mTextureCoords[0][texcoord_index].y;
+
+				printf("%u (%f, %f)\n", texcoord_index, texcoord.u, texcoord.v);
+				mesh->addTextureCoordinate(texcoord);
+			}
 		}
 
 		/* Store triangles (assumes: faces are triangulated) */

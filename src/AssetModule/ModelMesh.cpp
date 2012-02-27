@@ -8,6 +8,8 @@
 
 ModelMesh::ModelMesh()
 {
+	m_has_texcoords = false;
+	m_has_normals = false;
 
 }
 
@@ -19,7 +21,10 @@ void ModelMesh::addVertex(struct Vertex& vertex)
 void ModelMesh::addTextureCoordinate(struct TextureCoordinate& texcoord)
 {
 	if (!m_has_texcoords)
+	{
 		m_has_texcoords = true;
+	}
+
 
 	m_texcoords.push_back(texcoord);
 }

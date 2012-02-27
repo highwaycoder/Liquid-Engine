@@ -14,16 +14,24 @@
 
 StaticMeshRenderable::StaticMeshRenderable(ModelMesh* mesh)
 {
+	has_texcoords = false;
+
 	/* Do we have tex coords? */
 	if (mesh->hasTextureCoordinates())
 		has_texcoords = true;
 
+	if (has_texcoords)
+	{
+		printf("godaamnint\n");
+		exit(0);
+	}
+
 	/* Allocate VBOs */
 	glGenBuffers(1, &m_vbo_vertices);
-	glGenBuffers(1, &m_vbo_texcoords);
+	glGenBuffers(1, &m_vbo_elements);
 
 	if (has_texcoords)
-		glGenBuffers(1, &m_vbo_elements);
+		glGenBuffers(1, &m_vbo_texcoords);
 
 	/* Store attributes */
 	m_num_vertices = mesh->getVertexCount();
@@ -44,6 +52,13 @@ StaticMeshRenderable::StaticMeshRenderable(ModelMesh* mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo_elements);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles_size, &triangles[0], GL_STATIC_DRAW);
 
+	if (has_texcoords)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo_texcoords);
+		glBufferData(GL_ARRAY_BUFFER, texcoords_size, &texcoords[0], GL_STATIC_DRAW);
+	}
+
+	/* Unbind buffer */
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	/* Store a reference to this modelmesh in case we need it again. */
@@ -61,25 +76,36 @@ void StaticMeshRenderable::render()
 {
 	if (GL_ARB_vertex_buffer_object)
 	{
-		printf("fucking shit\n");
+		//printf("fucking shit\n");
 		//exit(0);
 
 	}
 	else
 	{
-		printf("goddamnit\n");
+		//printf("goddamnit\n");
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo_vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
+	if (has_texcoords)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo_texcoords);
+		glTexCoordPointer(2, GL_FLOAT, 0, 0);
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
+
+	if (has_texcoords)
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo_elements);
 		glDrawElements(GL_TRIANGLES, m_num_elements, GL_UNSIGNED_INT, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	if (has_texcoords)
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

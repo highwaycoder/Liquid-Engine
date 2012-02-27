@@ -4,11 +4,17 @@
 #include "stdint.h"
 #include "AssetModule/ModelMesh.h"
 #include "StaticMeshRenderable.h"
+#include "TextureSample2D.h"
+
 class CompositeRender
 {
 	private:
 		uint32_t m_render_width;
 		uint32_t m_render_height;
+
+		uint32_t m_gltexture_handle;
+		float rot;
+		TextureSample2D* tex;
 
 	public:
 		CompositeRender();
