@@ -8,6 +8,12 @@
 #include "AssetModule/ModelLoader.h"
 #include "AssetModule/ImageLoader.h"
 
+#include "Material.h"
+
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include "AssetModule/ShaderSource.h"
+
 CompositeRender::CompositeRender()
 {
 	model = loadModel("../samples/monkey.obj");
@@ -15,35 +21,31 @@ CompositeRender::CompositeRender()
 	renderable = new StaticMeshRenderable(model);
 
 
-	Image* image = loadImage("../samples/tex.tga");
+	//Image* image = loadImage("../samples/tex.tga");
 
-	tex = new TextureSample2D(*image);
+	//tex = new TextureSample2D(*image);
 
 	printf("CREATED\n");
 
-	//glEnable(GL_TEXTURE_2D);
-	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	Material* material = new Material();
 
-	//glGenTextures(1, &m_gltexture_handle);
+	ShaderSource* shadersrc = new ShaderSource("../samples/flatten.vert");
+	shadersrc->print();
 
-	//glBindTexture(GL_TEXTURE_2D, m_gltexture_handle);
+	ShaderSource* shadersrc2 = new ShaderSource("../samples/color.frag");
+	shadersrc2->print();
 
-	//if (image->getBPP() == 32)
-	{
-	//	printf("fuck\n");
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->getWidth(), image->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getData());
-	}	
-	//else if (image->getBPP() == 24)
-	{
-	//	printf("shit\n");
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->getWidth(), image->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->getData());
-	}
 
-	//glTexImage2D(GL_TEXTURE_2D, 0, 4, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getData());
+	VertexShader* shader = new VertexShader(shadersrc);
+	FragmentShader* shader2 = new FragmentShader(shadersrc2);
 
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	material->AttachShader(shader);
+	material->LinkMaterial();
 
+	material->AttachShader(shader2);
+	material->LinkMaterial();
+
+	material->UseMaterial();
 }
 
 void CompositeRender::Render()
@@ -69,13 +71,13 @@ void CompositeRender::Render()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -34.0f);
+	glTranslatef(0.0f, 0.0f, -14.0f);
 
 	glEnable(GL_DEPTH_TEST);
 
 	//glEnable(GL_TEXTURE_2D);
 
-	//glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LEQUAL);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
@@ -85,7 +87,7 @@ void CompositeRender::Render()
 
 	glColor3f(1.0f,1.0f,1.0f);
 
-	tex->useTexture();
+	//tex->useTexture();
 
 	renderable->render();
 
