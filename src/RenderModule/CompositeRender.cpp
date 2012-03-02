@@ -13,6 +13,7 @@
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include "AssetModule/ShaderSource.h"
+#include "AssetModule/ModelMesh.h"
 
 CompositeRender::CompositeRender()
 {
@@ -89,8 +90,10 @@ void CompositeRender::Render()
 
 	//tex->useTexture();
 
-	renderable->render();
-
+	for (int i = 0; i < 1000; i++)
+	{
+		renderable->render();
+	}
 
 	glFlush();
 

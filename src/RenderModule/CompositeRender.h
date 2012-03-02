@@ -2,9 +2,10 @@
 #define __H_COMPOSITERENDER__
 
 #include "stdint.h"
-#include "AssetModule/ModelMesh.h"
 #include "StaticMeshRenderable.h"
 #include "TextureSample2D.h"
+
+class ModelMesh;
 
 class CompositeRender
 {

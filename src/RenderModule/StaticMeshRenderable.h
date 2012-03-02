@@ -2,7 +2,8 @@
 #define __H_STATICMESHRENDERABLE__
 
 #include <stdint.h>
-#include "AssetModule/ModelMesh.h"
+
+class ModelMesh;
 
 class StaticMeshRenderable
 {

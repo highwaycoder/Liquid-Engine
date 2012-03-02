@@ -44,7 +44,7 @@ ifeq ($(TARGETPLATFORM),win32)
 	OPENGLLIBS=-lopengl32 -lglu32
 endif
 ifeq ($(TARGETPLATFORM),linux32)
-	OPENGLLIBS=-lGL -lGLU -lglee
+	OPENGLLIBS=-lGL -lGLU -lglee -lSDL
 endif
 ifeq ($(TARGETPLATFORM),linux64)
 	OPENGLLIBS=-lGL -lGLU
@@ -81,17 +81,11 @@ all: library demo
 
 .PHONY: UtilityModule AssetModule RenderModule EngineModule library demo bindir builddir
 
-demo: demo.o DemoApplication.o DemoEventHandler.o library
-	$(CC) demo.o DemoApplication.o DemoEventHandler.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(ASSETMODULELIBS) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
+demo: demo.o library
+	$(CC) demo.o -o demo $(BINDIR)/$(LIBRARYBINARY) $(ASSETMODULELIBS) $(LIBS) $(LINKING) $(OPENGLLIBS) -g
 
 demo.o:
 	$(CC) -c demo.cpp -I../include
-
-DemoApplication.o:
-	$(CC) -c DemoApplication.cpp -I../include
-
-DemoEventHandler.o:
-	$(CC) -c DemoEventHandler.cpp -I../include
 
 
 library: builddir bindir UtilityModule AssetModule RenderModule EngineModule

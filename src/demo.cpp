@@ -2,35 +2,38 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "DemoApplication.h"
-#include "DemoEventHandler.h"
-
 #include "AssetModule/ModelLoader.h"
 #include "AssetModule/ImageLoader.h"
 
 #include "AssetModule/ShaderSource.h"
 #include "RenderModule/VertexShader.h"
 
+#include "RenderModule/CompositeRender.h"
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "SDL/SDL.h"
+#include "SDL/SDL_opengl.h"
+
+#include <SFML/Window.hpp>
+
 int main(int argc, char** argv)
 {
+	sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL");
 
-	DemoApplication* app = new DemoApplication();
-	EngineWindow* window = app->getWindowManager().createWindow();
-	window->registerEventHandler(new DemoEventHandler());
+	CompositeRender c;
 
-	//ShaderSource* shadersrc = new ShaderSource("../samples/flatten.vert");
-	//shadersrc->print();
+	const unsigned char* version = glGetString(GL_VERSION);
 
-	//VertexShader* shader = new VertexShader(shadersrc);
+	printf("OpenGL Version: %s\n", version);
 
-	//loadModel("../samples/container.obj");
+	App.SetActive();
 
-	while (1)
+	while(App.IsOpened())
 	{
-		app->run();
+		c.Render();
+		App.Display();
 	}
 }
 
