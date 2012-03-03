@@ -44,7 +44,7 @@ ifeq ($(TARGETPLATFORM),win32)
 	OPENGLLIBS=-lopengl32 -lglu32
 endif
 ifeq ($(TARGETPLATFORM),linux32)
-	OPENGLLIBS=-lGL -lGLU -lglee -lSDL
+	OPENGLLIBS=-lGL -lGLU -lglee
 endif
 ifeq ($(TARGETPLATFORM),linux64)
 	OPENGLLIBS=-lGL -lGLU

@@ -13,9 +13,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_opengl.h"
-
 #include <SFML/Window.hpp>
 
 int main(int argc, char** argv)
@@ -28,12 +25,21 @@ int main(int argc, char** argv)
 
 	printf("OpenGL Version: %s\n", version);
 
+	App.UseVerticalSync(false);
+
 	App.SetActive();
+
+	float Framerate;
 
 	while(App.IsOpened())
 	{
 		c.Render();
 		App.Display();
+
+		Framerate = 1.f / App.GetFrameTime();
+
+		if (Framerate > 2000)
+			printf("FPS: %f\n", Framerate);
 	}
 }
 

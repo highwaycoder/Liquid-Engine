@@ -14,7 +14,7 @@ ModelMesh* loadModel(char* path)
 	ModelMesh* mesh = new ModelMesh();
 
 	Assimp::Importer importer;
-	const aiScene* scene = (aiScene*) importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_CalcTangentSpace);
+	const aiScene* scene = (aiScene*) importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 
 	/* We don't have any meshes, so scrap this file */
 	if (!scene->HasMeshes())
@@ -30,17 +30,27 @@ ModelMesh* loadModel(char* path)
 		aiMesh* aimesh = scene->mMeshes[mesh_index];
 
 		uint32_t num_vertices = aimesh->mNumVertices;
+		uint32_t num_normals = aimesh->mNumVertices;
 		uint32_t num_triangles = aimesh->mNumFaces;
-
 		uint32_t num_texcoords = aimesh->mNumVertices;
 
-		/* Store vertices */
+		/* Store vertices (and if they exist: Normals!) */
 		for (uint32_t vertex_index = 0; vertex_index < num_vertices; vertex_index++)
 		{
 			struct Vertex vertex;
 			vertex.x = aimesh->mVertices[vertex_index].x;
 			vertex.y = aimesh->mVertices[vertex_index].y;
 			vertex.z = aimesh->mVertices[vertex_index].z;
+
+			if (aimesh->HasNormals())
+			{
+				struct Normal normal;
+				normal.x = aimesh->mNormals[vertex_index].x;
+				normal.y = aimesh->mNormals[vertex_index].y;
+				normal.z = aimesh->mNormals[vertex_index].z;
+
+				mesh->addNormal(normal);
+			}
 
 			mesh->addVertex(vertex);
 		}

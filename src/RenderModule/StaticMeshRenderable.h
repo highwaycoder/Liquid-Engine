@@ -8,19 +8,18 @@ class ModelMesh;
 class StaticMeshRenderable
 {
 	private:
-		void* m_vertices;
-		void* m_texcoords;
-		void* m_elements;
-
 		uint32_t m_num_vertices;
+		uint32_t m_num_normals;
 		uint32_t m_num_texcoords;
 		uint32_t m_num_elements;
 
 		uint32_t m_vbo_vertices;
+		uint32_t m_vbo_normals;		
 		uint32_t m_vbo_texcoords;
 		uint32_t m_vbo_elements;
 
 		bool has_texcoords;
+		bool has_normals;
 
 		ModelMesh* m_mesh;
 	public:
